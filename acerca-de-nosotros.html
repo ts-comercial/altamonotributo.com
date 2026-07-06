@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- SEO primario -->
+  <title>Acerca de Nosotros | AltaMonotributo.com</title>
+  <meta name="description" content="AltaMonotributo.com es un servicio privado de asistencia para monotributistas en Argentina. Conocé quiénes somos y por qué elegirnos para tu alta de Monotributo."/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://altamonotributo.com.ar/acerca-de-nosotros/"/>
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Acerca de Nosotros | AltaMonotributo.com"/>
+  <meta property="og:description" content="Quiénes somos y por qué elegir AltaMonotributo.com para tu alta de Monotributo."/>
+  <meta property="og:locale" content="es_AR"/>
+
+  <!-- Fuentes: Inter Variable -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..900&display=swap" rel="stylesheet"/>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --negro:      #12151D;
+      --negro2:     #1C2029;
+      --azul:       #10B981;
+      --azul-dark:  #0D9488;
+      --azul-light: #ECFDF5;
+      --texto:      #111827;
+      --sub:        #6B7280;
+      --gris:       #9CA3AF;
+      --borde:      #E5E7EB;
+      --fondo:      #F9FAFB;
+      --blanco:     #fff;
+      --nav-h:      60px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      color: var(--texto);
+      background: var(--blanco);
+      -webkit-font-smoothing: antialiased;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.08s; }
+    .reveal-d2 { transition-delay: 0.18s; }
+    .reveal-d3 { transition-delay: 0.28s; }
+    .reveal-d4 { transition-delay: 0.38s; }
+
+    @keyframes glowDrift {
+      0%   { transform: translate(0%, 0%) scale(1); }
+      25%  { transform: translate(55%, 15%) scale(1.15); }
+      50%  { transform: translate(30%, 55%) scale(0.9); }
+      75%  { transform: translate(-10%, 25%) scale(1.1); }
+      100% { transform: translate(0%, 0%) scale(1); }
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 400;
+      height: var(--nav-h);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px;
+      background: rgba(18,21,29,0.88);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .logo { font-size: 14px; font-weight: 700; color: #fff; letter-spacing: -0.3px; text-decoration: none; background: none; border: none; cursor: pointer; font-family: inherit; }
+    .logo span { color: var(--azul); }
+    .nav-links { display: flex; align-items: center; gap: 24px; }
+    .nav-links a { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.48); text-decoration: none; transition: color .15s; }
+    .nav-links a:hover { color: rgba(255,255,255,0.9); }
+    .btn-nav {
+      background: var(--azul); color: #fff !important;
+      font-size: 13px; font-weight: 600;
+      padding: 7px 16px; border-radius: 8px;
+      transition: background .15s, transform .1s;
+    }
+    .btn-nav:hover { background: var(--azul-dark) !important; transform: translateY(-1px); }
+
+    /* ─── PAGE HEADER ─── */
+    .page-header {
+      background: var(--negro);
+      padding: calc(var(--nav-h) + 64px) 40px 64px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .page-header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+      background-size: 72px 72px;
+      pointer-events: none;
+    }
+    .page-header::after {
+      content: '';
+      position: absolute;
+      top: -20%; left: -20%;
+      width: 90%; height: 130%;
+      background: radial-gradient(ellipse at center, rgba(16,185,129,0.22) 0%, transparent 65%);
+      pointer-events: none;
+      animation: glowDrift 22s ease-in-out infinite;
+    }
+    .page-header > * { position: relative; z-index: 1; }
+    .breadcrumb { font-size: 12.5px; color: rgba(255,255,255,0.4); margin-bottom: 16px; }
+    .breadcrumb button, .breadcrumb span { background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0; }
+    .breadcrumb button:hover { color: rgba(255,255,255,0.7); }
+    .page-header h1 {
+      font-size: clamp(30px, 4vw, 44px);
+      font-weight: 800; color: #fff;
+      letter-spacing: -1.3px; line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    .page-header p { color: rgba(255,255,255,0.5); font-size: 15px; max-width: 480px; margin: 0 auto; }
+
+    /* ─── SECTION WRAPPER ─── */
+    .wrap { max-width: 1160px; margin: 0 auto; padding: 0 40px; }
+    section { padding: 80px 0; }
+
+    .sec-label {
+      display: inline-block;
+      font-size: 10.5px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1.4px;
+      color: var(--azul);
+      background: var(--azul-light);
+      padding: 3px 11px; border-radius: 100px;
+      margin-bottom: 14px;
+    }
+    .sec-h { font-size: clamp(24px, 3vw, 32px); font-weight: 800; letter-spacing: -1.1px; line-height: 1.15; margin-bottom: 14px; }
+    .sec-sub { font-size: 15px; color: var(--sub); line-height: 1.8; max-width: 620px; }
+
+    .sec-dark {
+      background: var(--negro);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      position: relative; overflow: hidden;
+    }
+    .sec-dark::after {
+      content: '';
+      position: absolute; z-index: 0;
+      top: -30%; right: -10%;
+      width: 45%; height: 140%;
+      background: radial-gradient(ellipse at center, rgba(16,185,129,0.14) 0%, transparent 70%);
+      pointer-events: none;
+      animation: glowDrift 20s ease-in-out infinite;
+    }
+    .sec-dark .wrap { position: relative; z-index: 1; }
+    .sec-label.on-dark { background: rgba(16,185,129,0.15); color: #6EE7B7; }
+    .sec-h.on-dark { color: #fff; }
+    .sec-sub.on-dark { color: rgba(255,255,255,0.5); }
+
+    /* ─── GRID VENTAJAS (dark) ─── */
+    .pasos {
+      margin-top: 40px;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .paso { background: var(--negro2); padding: 28px 24px; position: relative; overflow: hidden; }
+    .paso::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+    .paso-circle {
+      position: relative; z-index: 1;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(16,185,129,0.15);
+      border: 1px solid rgba(16,185,129,0.4);
+      color: #6EE7B7;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .paso h3 { position: relative; z-index: 1; font-size: 14px; font-weight: 700; margin-bottom: 6px; color: #fff; }
+    .paso p { position: relative; z-index: 1; font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.65; }
+
+    /* ─── CONTACTO ─── */
+    .contact-box { background: var(--negro); border-radius: 20px; padding: 48px 40px; text-align: center; position: relative; overflow: hidden; }
+    .contact-box::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    }
+    .contact-box > * { position: relative; z-index: 1; }
+    .contact-box .sec-h { color: #fff; }
+    .contact-box p { color: rgba(255,255,255,0.5); }
+    .contact-box .contact-links { margin-top: 22px; display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; }
+    .contact-box .contact-links a { color: #6EE7B7; font-weight: 700; font-size: 14.5px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+    .contact-box .contact-links a:hover { text-decoration: underline; }
+
+    /* ─── CTA FINAL ─── */
+    .cta-section { background: linear-gradient(135deg, #10B981 0%, #0D9488 100%); padding: 88px 40px; text-align: center; }
+    .cta-section h2 { font-size: clamp(26px, 4vw, 40px); font-weight: 800; color: #fff; letter-spacing: -1.3px; line-height: 1.1; margin-bottom: 14px; }
+    .cta-section p { color: rgba(255,255,255,0.44); font-size: 15px; margin-bottom: 30px; }
+    .btn-cta-white {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #fff; color: var(--negro);
+      font-size: 14px; font-weight: 700;
+      padding: 14px 28px; border-radius: 10px;
+      text-decoration: none; transition: opacity .15s, transform .12s;
+    }
+    .btn-cta-white:hover { opacity: 0.9; transform: translateY(-2px); }
+
+    /* ─── FOOTER ─── */
+    .aviso { background: var(--fondo); border-top: 1px solid var(--borde); padding: 18px 40px; text-align: center; font-size: 11px; color: var(--gris); line-height: 1.9; }
+    footer { padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: var(--gris); max-width: 1160px; margin: 0 auto; }
+    footer a { color: var(--gris); text-decoration: none; }
+    footer a:hover { color: var(--sub); }
+
+    /* ─── WHATSAPP FLOAT ─── */
+    .wa-float {
+      position: fixed; bottom: 28px; right: 28px; z-index: 300;
+      width: 52px; height: 52px; border-radius: 50%;
+      background: #25D366;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.45);
+      transition: transform .2s, box-shadow .2s;
+      text-decoration: none;
+    }
+    .wa-float:hover { transform: scale(1.08) translateY(-2px); box-shadow: 0 8px 30px rgba(37,211,102,0.55); }
+    .wa-float svg { width: 28px; height: 28px; fill: #fff; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 960px) {
+      .wrap { padding: 0 24px; }
+      section { padding: 60px 0; }
+      nav { padding: 0 24px; }
+      .page-header { padding: calc(var(--nav-h) + 48px) 24px 48px; }
+      .pasos { grid-template-columns: 1fr 1fr; }
+      .cta-section { padding: 64px 24px; }
+      .contact-box { padding: 36px 24px; }
+      .aviso, footer { padding-left: 24px; padding-right: 24px; }
+    }
+    @media (max-width: 600px) {
+      nav .nav-links a:not(.btn-nav) { display: none; }
+      .pasos { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 8px; text-align: center; }
+      .contact-box .contact-links { flex-direction: column; gap: 16px; }
+      .contact-box { padding-bottom: 90px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <button type="button" class="logo js-home">Alta<span>Monotributo</span></button>
+  <div class="nav-links">
+    <a href="#" class="js-home">Inicio</a>
+    <a href="#" class="btn-nav js-cta">Darme de alta</a>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="breadcrumb reveal"><button type="button" class="js-home">Inicio</button> / Acerca de nosotros</div>
+  <h1 class="reveal">Acerca de Nosotros</h1>
+  <p class="reveal">Quiénes somos y cómo te acompañamos con tu Monotributo.</p>
+</div>
+
+<!-- ¿QUIÉNES SOMOS? -->
+<section>
+  <div class="wrap">
+    <div class="sec-label reveal">Acerca de nosotros</div>
+    <h2 class="sec-h reveal">¿Quiénes somos?</h2>
+    <p class="sec-sub reveal" style="max-width:640px;">AltaMonotributo.com es un servicio privado de asistencia y acompañamiento para monotributistas en Argentina, operado por Tributo Simple.</p>
+    <p class="sec-sub reveal" style="max-width:640px;margin-top:14px;">Ayudamos a personas que necesitan resolver el alta del Monotributo de forma simple, rápida y con asesoramiento humano, sin vueltas ni complicaciones.</p>
+    <p class="sec-sub reveal" style="max-width:640px;margin-top:14px;">No estás solo: un asesor te acompaña por WhatsApp o teléfono durante todo el proceso, y es nuestro equipo el que hace el trámite completo ante ARCA. Vos no entrás a ningún portal ni tenés que completar nada por tu cuenta.</p>
+  </div>
+</section>
+
+<!-- SERVICIO PRIVADO -->
+<section style="background:var(--fondo);border-top:1px solid var(--borde);border-bottom:1px solid var(--borde);">
+  <div class="wrap">
+    <div class="sec-label reveal">Transparencia</div>
+    <h2 class="sec-h reveal">Servicio privado — No afiliado a ARCA (ex AFIP)</h2>
+    <p class="sec-sub reveal" style="max-width:640px;">Es importante aclararlo: AltaMonotributo.com NO es un sitio oficial del Estado. No pertenecemos a ARCA (ex AFIP) ni estamos afiliados a ningún organismo gubernamental.</p>
+    <p class="sec-sub reveal" style="max-width:640px;margin-top:14px;">Somos un servicio privado y pago, que brinda asistencia administrativa para facilitar el trámite de alta que se realiza ante organismos oficiales. También podés hacerlo vos mismo, de forma gratuita, en arca.gob.ar.</p>
+  </div>
+</section>
+
+<!-- ¿POR QUÉ ELEGIRNOS? -->
+<section class="sec-dark">
+  <div class="wrap">
+    <div class="sec-label on-dark reveal">Nuestra diferencia</div>
+    <h2 class="sec-h on-dark reveal">¿Por qué elegirnos?</h2>
+    <div class="pasos">
+      <div class="paso reveal reveal-d1">
+        <div class="paso-circle">01</div>
+        <h3>Trámites claros</h3>
+        <p>Sin tecnicismos ni letra chica. Te explicamos todo en criollo.</p>
+      </div>
+      <div class="paso reveal reveal-d2">
+        <div class="paso-circle">02</div>
+        <h3>Atención personalizada</h3>
+        <p>Por WhatsApp o teléfono, cada caso lo tratamos como corresponde.</p>
+      </div>
+      <div class="paso reveal reveal-d3">
+        <div class="paso-circle">03</div>
+        <h3>Acompañamiento humano</h3>
+        <p>Hay personas reales del otro lado. Nada de respuestas automáticas.</p>
+      </div>
+      <div class="paso reveal reveal-d4">
+        <div class="paso-circle">04</div>
+        <h3>Sin turnos ni traslados</h3>
+        <p>Todo se resuelve online, desde tu celular o computadora.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DATOS DE CONTACTO -->
+<section style="background:var(--fondo);border-top:1px solid var(--borde);">
+  <div class="wrap">
+    <div class="contact-box reveal">
+      <h2 class="sec-h">Datos de contacto</h2>
+      <p>Si necesitás comunicarte con nosotros, podés hacerlo por los siguientes medios. Nuestro equipo está disponible para ayudarte y responder tus consultas.</p>
+      <div class="contact-links">
+        <a href="https://wa.me/5491100000000" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M17.5 14.4c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.44-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.87 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.42-.07-.12-.27-.2-.57-.35z" fill="#6EE7B7"/></svg>
+          WhatsApp
+        </a>
+        <a href="mailto:contacto@tributosimple.com">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 6h18v12H3V6z" stroke="#6EE7B7" stroke-width="1.6"/><path d="M3 7l9 6 9-6" stroke="#6EE7B7" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          contacto@tributosimple.com
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<div class="cta-section">
+  <h2>¿Todo listo para tu alta?</h2>
+  <p>Volvé al formulario y en menos de 24hs tenés tu constancia.</p>
+  <a href="#" class="btn-cta-white js-cta">
+    Quiero mi alta
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+</div>
+
+<!-- AVISO LEGAL -->
+<div class="aviso">
+  <strong>Aviso legal:</strong> AltaMonotributo.com es un servicio privado de asistencia. No somos ARCA ni estamos afiliados al gobierno.
+</div>
+
+<footer>
+  <div>© 2026 AltaMonotributo</div>
+  <div style="display:flex;gap:16px;">
+    <a href="javascript:void(0)" class="js-home">Volver al inicio</a>
+  </div>
+</footer>
+
+<!-- WhatsApp Float — reemplazá el número por el tuyo -->
+<a href="https://wa.me/5491100000000" class="wa-float" target="_blank" rel="noopener" aria-label="Consultá por WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<script>
+  (function () {
+    var ref = document.referrer || '';
+    var home = ref.indexOf('landing_alta_monotributo_b.html') !== -1
+      ? 'landing_alta_monotributo_b.html'
+      : 'landing_alta_monotributo.html';
+    document.querySelectorAll('.js-home').forEach(function (el) { el.setAttribute('href', home); });
+    document.querySelectorAll('.js-cta').forEach(function (el) { el.setAttribute('href', home + '#formulario'); });
+    document.querySelectorAll('.js-home').forEach(function (el) {
+      if (el.tagName === 'BUTTON') el.addEventListener('click', function () { window.location.href = home; });
+    });
+  })();
+
+  /* ─── Scroll reveal ─── */
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+</script>
+
+</body>
+</html>
