@@ -104,24 +104,26 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --negro: #12151D;
-      --negro2: #1C2029;
-      --azul: #10B981;
+      --negro:      #12151D;
+      --negro2:     #1C2029;
+      --azul:       #10B981;
+      --azul-dark:  #0D9488;
       --azul-light: #ECFDF5;
-      --texto: #111827;
-      --sub: #6B7280;
-      --gris: #9CA3AF;
-      --borde: #E5E7EB;
-      --fondo: #F9FAFB;
-      --blanco: #fff;
-      --verde: #059669;
-      --radio: 12px;
+      --texto:      #111827;
+      --sub:        #6B7280;
+      --gris:       #9CA3AF;
+      --borde:      #E5E7EB;
+      --fondo:      #F9FAFB;
+      --blanco:     #fff;
+      --verde:      #059669;
+      --rojo:       #DC2626;
+      --nav-h:      60px;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Inter', system-ui, sans-serif;
       color: var(--texto);
       background: var(--blanco);
       -webkit-font-smoothing: antialiased;
@@ -129,37 +131,66 @@
       line-height: 1.6;
     }
 
+    /* ─── SCROLL REVEAL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.08s; }
+    .reveal-d2 { transition-delay: 0.18s; }
+    .reveal-d3 { transition-delay: 0.28s; }
+    .reveal-d4 { transition-delay: 0.38s; }
+
     /* ─── NAV ─── */
     nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 300;
-      height: 58px;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 400;
+      height: var(--nav-h);
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 40px;
-      background: rgba(18,21,29,0.85);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: rgba(18,21,29,0.88);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
     .logo {
-      font-size: 15px; font-weight: 700; color: #fff;
-      letter-spacing: -0.2px;
+      font-size: 14px; font-weight: 700; color: #fff;
+      letter-spacing: -0.3px; text-decoration: none;
     }
     .logo span { color: var(--azul); }
-    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links { display: flex; align-items: center; gap: 24px; }
     .nav-links a {
-      font-size: 13px; font-weight: 450; color: rgba(255,255,255,0.55);
+      font-size: 13px; font-weight: 500;
+      color: rgba(255,255,255,0.48);
       text-decoration: none; transition: color .15s;
     }
     .nav-links a:hover { color: rgba(255,255,255,0.9); }
     .btn-nav {
-      background: var(--azul); color: #fff;
+      background: var(--azul); color: #fff !important;
       font-size: 13px; font-weight: 600;
-      padding: 8px 18px; border-radius: 8px;
-      text-decoration: none; transition: opacity .15s;
+      padding: 7px 16px; border-radius: 8px;
+      transition: background .15s, transform .1s;
     }
-    .btn-nav:hover { opacity: 0.85; color: #fff; }
+    .btn-nav:hover { background: var(--azul-dark) !important; transform: translateY(-1px); }
 
     /* ─── HERO BACKGROUND ─── */
-    .hero-bg { background: var(--negro); position: relative; overflow: hidden; }
+    .hero-bg {
+      background: var(--negro);
+      position: relative;
+      overflow: hidden;
+    }
+    /* Subtle grid texture */
+    .hero-bg::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+      background-size: 72px 72px;
+      pointer-events: none;
+    }
+    /* Glow verde animado, recorre todo el hero */
     .hero-bg::after {
       content: '';
       position: absolute;
@@ -168,7 +199,6 @@
       background: radial-gradient(ellipse at center, rgba(16,185,129,0.22) 0%, transparent 65%);
       pointer-events: none;
       animation: glowDrift 22s ease-in-out infinite;
-      z-index: 0;
     }
     @keyframes glowDrift {
       0%   { transform: translate(0%, 0%) scale(1); }
@@ -178,84 +208,80 @@
       100% { transform: translate(0%, 0%) scale(1); }
     }
 
-    /* ─── HERO ─── */
+    /* ─── HERO GRID ─── */
     .hero {
-      position: relative; z-index: 1;
-      padding: 120px 40px 80px;
-      min-height: 100vh;
+      padding: calc(var(--nav-h) + 64px) 40px 88px;
+      max-width: 1160px; margin: 0 auto;
       display: grid;
       grid-template-columns: 1fr 420px;
-      gap: 80px;
-      max-width: 1160px;
-      margin: 0 auto;
+      gap: 72px;
       align-items: center;
+      min-height: 100vh;
+      position: relative; z-index: 1;
     }
 
+    /* ─── HERO LEFT ─── */
     .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: 8px;
-      margin-bottom: 28px;
+      display: inline-flex; align-items: center; gap: 9px;
+      margin-bottom: 30px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.09);
+      padding: 5px 13px 5px 9px;
+      border-radius: 100px;
     }
     .eyebrow-dot {
       width: 7px; height: 7px; border-radius: 50%;
-      background: var(--verde);
-      animation: blink 2s ease-in-out infinite;
+      background: var(--verde); flex-shrink: 0;
+      box-shadow: 0 0 0 0 rgba(5,150,105,0.5);
+      animation: pulse-dot 2.5s ease-in-out infinite;
     }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
+    @keyframes pulse-dot {
+      0%   { box-shadow: 0 0 0 0 rgba(5,150,105,0.5); }
+      70%  { box-shadow: 0 0 0 7px rgba(5,150,105,0); }
+      100% { box-shadow: 0 0 0 0 rgba(5,150,105,0); }
     }
     .eyebrow-text {
       font-size: 12px; font-weight: 500;
-      color: rgba(255,255,255,0.45);
-      letter-spacing: 0.3px;
+      color: rgba(255,255,255,0.48); letter-spacing: 0.1px;
     }
 
     .hero h1 {
-      font-size: clamp(36px, 4.5vw, 56px);
+      font-size: clamp(38px, 4.5vw, 58px);
       font-weight: 800;
       line-height: 1.04;
       letter-spacing: -2.5px;
       color: #fff;
-      margin-bottom: 22px;
+      margin-bottom: 24px;
     }
     .hero h1 em {
       font-style: normal;
-      color: rgba(255,255,255,0.38);
+      color: rgba(255,255,255,0.28);
     }
 
     .hero-desc {
-      font-size: 15px;
-      color: rgba(255,255,255,0.5);
+      font-size: 15.5px;
+      color: rgba(255,255,255,0.46);
       line-height: 1.8;
-      max-width: 420px;
+      max-width: 400px;
       margin-bottom: 36px;
-      font-weight: 400;
     }
 
     .hero-puntos {
-      display: flex; flex-direction: column; gap: 11px;
-      margin-bottom: 44px;
+      display: flex; flex-direction: column; gap: 12px;
+      margin-bottom: 46px;
     }
     .punto {
-      display: flex; align-items: center; gap: 11px;
-      font-size: 13.5px; color: rgba(255,255,255,0.75);
-      font-weight: 450;
+      display: flex; align-items: center; gap: 12px;
+      font-size: 13.5px; color: rgba(255,255,255,0.7);
+      font-weight: 500;
     }
     .punto-check {
-      width: 16px; height: 16px; flex-shrink: 0;
-      border-radius: 50%;
-      background: rgba(5,150,105,0.2);
-      border: 1px solid rgba(5,150,105,0.4);
+      width: 18px; height: 18px; flex-shrink: 0; border-radius: 50%;
+      background: rgba(5,150,105,0.15);
+      border: 1px solid rgba(5,150,105,0.35);
       display: flex; align-items: center; justify-content: center;
     }
-    .punto-check::after {
-      content: '';
-      width: 6px; height: 4px;
-      border-left: 1.5px solid var(--verde);
-      border-bottom: 1.5px solid var(--verde);
-      transform: rotate(-45deg) translateY(-1px);
-      display: block;
-    }
+    .punto-check svg { width: 10px; height: 10px; }
 
     .hero-aviso {
       font-size: 11.5px; color: rgba(255,255,255,0.35);
@@ -264,72 +290,95 @@
     .hero-aviso strong { color: rgba(255,255,255,0.55); }
 
     .hero-nums {
-      display: flex; gap: 32px;
-      padding-top: 32px;
-      border-top: 1px solid rgba(255,255,255,0.07);
+      display: flex; gap: 36px;
+      padding-top: 36px;
+      border-top: 1px solid rgba(255,255,255,0.06);
     }
-    .num-item {}
     .num-val {
-      font-size: 22px; font-weight: 800;
-      color: #fff; letter-spacing: -0.8px;
+      font-size: 24px; font-weight: 800;
+      color: #fff; letter-spacing: -1px; line-height: 1;
     }
     .num-label {
-      font-size: 11.5px; color: rgba(255,255,255,0.35);
-      margin-top: 2px; font-weight: 400;
+      font-size: 11.5px; color: rgba(255,255,255,0.3);
+      margin-top: 4px; font-weight: 400;
     }
 
     /* ─── FORM CARD ─── */
     .form-card {
       background: var(--blanco);
       border-radius: 20px;
-      padding: 32px;
-      box-shadow: 0 0 0 1px rgba(0,0,0,0.06), 0 24px 48px rgba(0,0,0,0.35);
-      position: relative;
+      padding: 30px;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.06),
+        0 20px 60px rgba(0,0,0,0.55),
+        0 0 90px rgba(16,185,129,0.2);
+      position: relative; z-index: 2;
     }
 
-    .form-progress {
-      display: flex; gap: 6px; margin-bottom: 24px;
+    /* Step indicator */
+    .form-stepper {
+      display: flex; align-items: center;
+      margin-bottom: 24px; gap: 0;
     }
-    .fpbar {
-      height: 2px; flex: 1; border-radius: 2px;
-      background: var(--borde); transition: background .3s;
+    .step-item {
+      display: flex; align-items: center; gap: 8px; flex: 1;
     }
-    .fpbar.active { background: var(--azul); }
+    .step-bubble {
+      width: 26px; height: 26px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+      border: 1.5px solid var(--borde);
+      color: var(--gris); background: var(--blanco);
+      transition: all .25s ease;
+      flex-shrink: 0;
+    }
+    .step-bubble.active  { background: var(--azul);  border-color: var(--azul);  color: #fff; }
+    .step-bubble.done    { background: var(--verde);  border-color: var(--verde); color: #fff; }
+    .step-label {
+      font-size: 11.5px; font-weight: 600;
+      color: var(--gris); transition: color .25s;
+    }
+    .step-item.active .step-label { color: var(--texto); }
+    .step-line {
+      flex: 1; height: 1.5px; max-width: 44px;
+      background: var(--borde); margin: 0 8px;
+      transition: background .3s;
+    }
+    .step-line.done { background: var(--verde); }
 
-    .form-top { margin-bottom: 22px; }
+    .form-top { margin-bottom: 20px; }
     .form-top h2 {
       font-size: 16px; font-weight: 700;
-      letter-spacing: -0.3px; color: var(--texto);
-      margin-bottom: 3px;
+      letter-spacing: -0.3px; color: var(--texto); margin-bottom: 2px;
     }
-    .form-top p {
-      font-size: 12.5px; color: var(--sub);
-    }
+    .form-top p { font-size: 12px; color: var(--gris); }
 
-    .fgroup { margin-bottom: 13px; }
-    .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+    /* ─── FIELDS ─── */
+    .fgroup { margin-bottom: 12px; }
+    .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
     label {
-      display: block; font-size: 11px; font-weight: 600;
-      color: #9CA3AF; margin-bottom: 5px;
-      text-transform: uppercase; letter-spacing: 0.5px;
+      display: block; font-size: 10.5px; font-weight: 700;
+      color: var(--gris); margin-bottom: 5px;
+      text-transform: uppercase; letter-spacing: 0.7px;
     }
     input, select {
       width: 100%;
-      border: 1px solid var(--borde);
-      border-radius: 9px;
-      padding: 10px 12px;
-      font-size: 13.5px;
-      font-family: 'Inter', sans-serif;
-      color: var(--texto);
-      background: var(--blanco);
-      outline: none;
-      appearance: none;
-      -webkit-appearance: none;
-      transition: border-color .15s, box-shadow .15s;
+      border: 1.5px solid var(--borde); border-radius: 9px;
+      padding: 10px 13px;
+      font-size: 13.5px; font-family: 'Inter', sans-serif;
+      color: var(--texto); background: var(--blanco);
+      outline: none; appearance: none; -webkit-appearance: none;
+      transition: border-color .15s, box-shadow .15s, background .15s;
     }
     input:focus, select:focus {
       border-color: var(--azul);
       box-shadow: 0 0 0 3px rgba(16,185,129,0.1);
+      background: #fafbff;
+    }
+    input.has-error, select.has-error {
+      border-color: var(--rojo);
+      box-shadow: 0 0 0 3px rgba(220,38,38,0.08);
     }
     input::placeholder { color: #D1D5DB; }
     select {
@@ -337,34 +386,64 @@
       background-repeat: no-repeat; background-position: right 10px center;
       background-size: 16px; padding-right: 32px; cursor: pointer;
     }
-    .fnota { font-size: 11px; color: var(--gris); margin-top: 4px; }
 
+    .fnota   { font-size: 11px; color: var(--gris); margin-top: 4px; }
+    .ferror  {
+      font-size: 11px; color: var(--rojo);
+      margin-top: 4px; display: none;
+      animation: errFade .18s ease;
+    }
+    .ferror.show { display: block; }
+
+    @keyframes errFade {
+      from { opacity: 0; transform: translateY(-3px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60%  { transform: translateX(-6px); }
+      40%, 80%  { transform: translateX(6px); }
+    }
+    .do-shake { animation: shake .32s ease; }
+
+    /* ─── SUBMIT BUTTON ─── */
     .btn-submit {
       width: 100%; border: none; cursor: pointer;
       background: var(--negro); color: #fff;
-      border-radius: 10px; padding: 13px;
-      font-size: 14px; font-weight: 600;
-      font-family: 'Inter', sans-serif;
+      border-radius: 10px; padding: 13px 16px;
+      font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif;
       margin-top: 8px;
-      transition: opacity .15s, transform .1s;
-      display: flex; align-items: center; justify-content: center; gap: 7px;
+      transition: background .15s, transform .1s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
     }
-    .btn-submit:hover { opacity: 0.82; transform: translateY(-1px); }
+    .btn-submit:hover:not(:disabled) { background: #1c1c20; transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .btn-spinner {
+      width: 15px; height: 15px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff; border-radius: 50%;
+      animation: spin .65s linear infinite;
+      display: none; flex-shrink: 0;
+    }
+    .btn-submit.loading .btn-spinner { display: block; }
+    .btn-submit.loading .btn-label   { opacity: 0.75; }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     .form-pie {
       display: flex; align-items: center; justify-content: center;
-      gap: 5px; margin-top: 11px;
+      gap: 5px; margin-top: 10px;
       font-size: 11px; color: var(--gris);
     }
-    .form-pie svg { width: 12px; height: 12px; }
+    .form-pie svg { width: 11px; height: 11px; flex-shrink: 0; }
 
     .btn-volver {
-      background: none; border: none;
+      background: none; border: none; cursor: pointer;
       font-size: 12px; color: var(--gris);
-      cursor: pointer; font-family: 'Inter', sans-serif;
+      font-family: 'Inter', sans-serif;
       width: 100%; text-align: center;
       margin-top: 8px; padding: 4px;
       transition: color .15s;
+      display: flex; align-items: center; justify-content: center; gap: 4px;
     }
     .btn-volver:hover { color: var(--sub); }
 
@@ -394,12 +473,13 @@
       background: var(--blanco);
       border: 1.5px solid var(--borde); border-radius: 10px;
       padding: 13px 16px;
-      transition: border-color .15s, background .15s;
+      transition: border-color .15s, background .15s, transform .1s;
     }
     .opt-card:hover { border-color: var(--gris); }
     .opt-card.selected {
       border-color: var(--azul);
       background: var(--azul-light);
+      color: var(--azul-dark, var(--azul));
     }
     .filtro-nav {
       display: flex; gap: 10px; margin-top: 16px;
@@ -415,39 +495,43 @@
     }
     .btn-volver-mini:hover { border-color: var(--gris); color: var(--texto); }
 
-    /* ─── CONFIRMACIÓN ─── */
-    .ok-state { text-align: center; padding: 16px 0; }
+    /* ─── OK STATE ─── */
+    .ok-state { text-align: center; padding: 20px 0; }
     .ok-icon {
       width: 52px; height: 52px; border-radius: 50%;
       background: #ECFDF5;
       display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 18px;
+      margin: 0 auto 16px;
     }
-    .ok-icon svg { width: 24px; height: 24px; color: var(--verde); }
     .ok-state h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-    .ok-state p { font-size: 13px; color: var(--sub); line-height: 1.7; }
-    @keyframes loading-bar {
-      from { width: 0%; }
-      to   { width: 100%; }
+    .ok-state p  { font-size: 13px; color: var(--sub); line-height: 1.7; }
+    .ok-bar {
+      width: 100%; height: 3px; background: var(--borde);
+      border-radius: 3px; overflow: hidden; margin-top: 18px;
     }
+    .ok-fill {
+      height: 3px; background: var(--azul); border-radius: 3px;
+      animation: loadbar 1.2s ease-in-out forwards;
+    }
+    @keyframes loadbar { from { width: 0; } to { width: 100%; } }
 
-    /* ─── SECCIÓN WRAPPER ─── */
-    .wrap {
-      max-width: 1160px;
-      margin: 0 auto;
-      padding: 0 40px;
-    }
-    section { padding: 88px 0; }
+    /* ─── SECTION WRAPPER ─── */
+    .wrap { max-width: 1160px; margin: 0 auto; padding: 0 40px; }
+    section { padding: 92px 0; }
 
     .sec-label {
-      font-size: 11px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 1.2px;
-      color: var(--azul); margin-bottom: 14px;
+      display: inline-block;
+      font-size: 10.5px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1.4px;
+      color: var(--azul);
+      background: var(--azul-light);
+      padding: 3px 11px; border-radius: 100px;
+      margin-bottom: 14px;
     }
     .sec-h {
-      font-size: clamp(24px, 3vw, 34px);
-      font-weight: 800; letter-spacing: -1px;
-      line-height: 1.15; margin-bottom: 12px;
+      font-size: clamp(26px, 3vw, 36px);
+      font-weight: 800; letter-spacing: -1.2px;
+      line-height: 1.1; margin-bottom: 12px;
     }
     .sec-sub {
       font-size: 15px; color: var(--sub);
@@ -521,9 +605,8 @@
     .sec-h.on-dark { color: #fff; }
     .sec-sub.on-dark { color: rgba(255,255,255,0.5); }
     .pasos {
-      margin-top: 52px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      margin-top: 56px;
+      display: grid; grid-template-columns: repeat(4, 1fr);
       gap: 1px;
       background: rgba(255,255,255,0.08);
       border: 1px solid rgba(255,255,255,0.08);
@@ -545,33 +628,28 @@
       background-size: 28px 28px;
       pointer-events: none;
     }
-    .paso-num {
+    .paso-circle {
       position: relative; z-index: 1;
-      width: 30px; height: 30px; border-radius: 50%;
+      width: 34px; height: 34px; border-radius: 50%;
       background: rgba(16,185,129,0.15);
       border: 1px solid rgba(16,185,129,0.4);
       color: #6EE7B7;
       display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 700;
-      margin-bottom: 18px;
-      text-transform: none; letter-spacing: 0;
+      font-size: 12.5px; font-weight: 700;
+      margin-bottom: 20px;
     }
     .paso h3 { position: relative; z-index: 1; font-size: 14px; font-weight: 700; margin-bottom: 7px; color: #fff; }
-    .paso p { position: relative; z-index: 1; font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.65; }
+    .paso p  { position: relative; z-index: 1; font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.65; }
 
     /* ─── QUÉ INCLUYE ─── */
     .incluye-list {
-      margin-top: 48px;
-      border: 1px solid var(--borde);
-      border-radius: 16px;
-      overflow: hidden;
+      margin-top: 48px; border: 1px solid var(--borde);
+      border-radius: 16px; overflow: hidden;
     }
     .incluye-row {
       display: flex; align-items: flex-start; gap: 20px;
-      padding: 22px 28px;
-      border-bottom: 1px solid var(--borde);
-      background: var(--blanco);
-      transition: background .15s;
+      padding: 22px 28px; border-bottom: 1px solid var(--borde);
+      background: var(--blanco); transition: background .15s;
     }
     .incluye-row:last-child { border-bottom: none; }
     .incluye-row:hover { background: var(--fondo); }
@@ -590,7 +668,7 @@
       min-width: 24px; padding-top: 3px;
     }
     .inc-body h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
-    .inc-body p { font-size: 13px; color: var(--sub); line-height: 1.6; }
+    .inc-body p  { font-size: 13px; color: var(--sub); line-height: 1.6; }
 
     /* ─── TESTIMONIOS ─── */
     .test-grid {
@@ -599,70 +677,81 @@
     }
     .test-card {
       border: 1px solid var(--borde);
-      border-radius: 14px; padding: 24px;
+      border-radius: 16px; padding: 24px;
       background: var(--blanco);
+      transition: box-shadow .2s, transform .2s;
     }
-    .test-quote {
-      font-size: 24px; line-height: 1;
-      color: var(--borde); margin-bottom: 14px;
-      font-family: Georgia, serif;
+    .test-card:hover {
+      box-shadow: 0 8px 28px rgba(0,0,0,0.07);
+      transform: translateY(-3px);
     }
+    .test-stars {
+      display: flex; gap: 2px; margin-bottom: 14px;
+    }
+    .test-stars svg { width: 14px; height: 14px; fill: #F59E0B; }
     .test-card p {
       font-size: 13.5px; color: #374151;
-      line-height: 1.7; margin-bottom: 18px;
+      line-height: 1.75; margin-bottom: 18px;
     }
-    .test-info { display: flex; align-items: center; gap: 10px; }
+    .test-info  { display: flex; align-items: center; gap: 10px; }
     .test-avatar {
-      width: 32px; height: 32px; border-radius: 50%;
+      width: 34px; height: 34px; border-radius: 50%;
       background: var(--azul-light);
       display: flex; align-items: center; justify-content: center;
       font-size: 11px; font-weight: 700; color: var(--azul);
       flex-shrink: 0;
     }
-    .test-name { font-size: 12px; font-weight: 600; color: var(--texto); }
-    .test-rol { font-size: 11.5px; color: var(--gris); }
+    .test-name { font-size: 12.5px; font-weight: 600; color: var(--texto); }
+    .test-rol  { font-size: 11.5px; color: var(--gris); }
 
-    /* ─── FAQ (tarjeta con borde verde) ─── */
+    /* ─── FAQ (custom accordion) ─── */
     .faq-list {
-      margin-top: 44px;
-      max-width: 680px;
+      margin-top: 44px; max-width: 680px;
       border: 1px solid rgba(16,185,129,0.35);
       border-radius: 16px;
       padding: 6px 24px;
       background: linear-gradient(180deg, rgba(16,185,129,0.05), transparent 40%);
     }
-    details {
-      border-bottom: 1px solid var(--borde);
-    }
-    details:last-child { border-bottom: none; }
-    summary {
+    .faq-item { border-bottom: 1px solid var(--borde); }
+    .faq-item:last-child { border-bottom: none; }
+
+    .faq-trigger {
+      width: 100%; background: none; border: none;
       padding: 19px 0;
       font-size: 14px; font-weight: 600;
-      cursor: pointer; list-style: none;
+      cursor: pointer; font-family: 'Inter', sans-serif;
       display: flex; justify-content: space-between; align-items: center;
-      gap: 16px; color: var(--texto); user-select: none;
+      gap: 16px; color: var(--texto); text-align: left;
+      user-select: none;
     }
-    summary::-webkit-details-marker { display: none; }
-    .sum-icon {
-      width: 22px; height: 22px;
-      border: 1px solid var(--borde); border-radius: 50%;
+    .faq-trigger:hover { color: var(--azul); }
+    .faq-icon {
+      width: 24px; height: 24px; flex-shrink: 0; border-radius: 50%;
+      border: 1px solid var(--borde);
       display: flex; align-items: center; justify-content: center;
-      font-size: 15px; color: var(--gris);
-      flex-shrink: 0; transition: all .2s; line-height: 1;
+      transition: background .2s, border-color .2s;
     }
-    details[open] .sum-icon {
-      background: var(--negro); border-color: var(--negro);
-      color: #fff; transform: rotate(45deg);
+    .faq-icon svg {
+      width: 12px; height: 12px; color: var(--gris);
+      transition: transform .25s ease, color .2s;
     }
+    .faq-item.open .faq-icon { background: var(--negro); border-color: var(--negro); }
+    .faq-item.open .faq-icon svg { color: #fff; transform: rotate(45deg); }
+
+    .faq-content {
+      overflow: hidden; max-height: 0;
+      transition: max-height .38s cubic-bezier(0.4,0,0.2,1);
+    }
+    .faq-item.open .faq-content { max-height: 320px; }
     .faq-body {
-      padding: 0 0 19px;
+      padding: 0 0 20px;
       font-size: 13.5px; color: var(--sub); line-height: 1.8;
     }
 
-    /* ─── CTA ─── */
+    /* ─── CTA FINAL ─── */
     .cta-section {
       background: linear-gradient(135deg, #10B981 0%, #0D9488 100%);
-      padding: 88px 40px;
+      padding: 100px 40px;
       text-align: center;
       position: relative; overflow: hidden;
     }
@@ -674,33 +763,34 @@
       background: radial-gradient(ellipse, rgba(255,255,255,0.18) 0%, transparent 70%);
       pointer-events: none;
       animation: glowDriftCenter 15s ease-in-out infinite;
-      z-index: 0;
     }
     @keyframes glowDriftCenter {
       0%   { transform: translate(-50%, -50%) scale(1); }
       50%  { transform: translate(-58%, -42%) scale(1.15); }
       100% { transform: translate(-50%, -50%) scale(1); }
     }
-    .cta-section > * { position: relative; z-index: 1; }
     .cta-section h2 {
-      font-size: clamp(26px, 4vw, 42px);
+      font-size: clamp(28px, 4vw, 46px);
       font-weight: 800; color: #fff;
-      letter-spacing: -1.5px; line-height: 1.1;
-      margin-bottom: 14px;
+      letter-spacing: -1.5px; line-height: 1.08;
+      margin-bottom: 14px; position: relative; z-index: 1;
     }
-    .cta-section h2 em {
-      font-style: normal; color: rgba(255,255,255,0.35);
+    .cta-section h2 em { font-style: normal; color: rgba(255,255,255,0.28); }
+    .cta-section p {
+      color: rgba(255,255,255,0.44); font-size: 15px;
+      margin-bottom: 34px; position: relative; z-index: 1;
     }
-    .cta-section p { color: rgba(255,255,255,0.45); font-size: 15px; margin-bottom: 32px; }
     .btn-cta-white {
-      display: inline-block;
+      display: inline-flex; align-items: center; gap: 8px;
       background: #fff; color: var(--negro);
       font-size: 14px; font-weight: 700;
-      padding: 13px 28px; border-radius: 10px;
-      text-decoration: none; transition: opacity .15s;
+      padding: 14px 28px; border-radius: 10px;
+      text-decoration: none;
+      transition: opacity .15s, transform .12s;
       letter-spacing: -0.1px;
+      position: relative; z-index: 1;
     }
-    .btn-cta-white:hover { opacity: 0.88; }
+    .btn-cta-white:hover { opacity: 0.9; transform: translateY(-2px); }
     .btn-inline-cta {
       display: inline-flex; align-items: center; gap: 8px;
       background: var(--azul); color: #fff;
@@ -709,7 +799,7 @@
       text-decoration: none;
       transition: background .15s, transform .1s;
     }
-    .btn-inline-cta:hover { opacity: 0.9; }
+    .btn-inline-cta:hover { background: var(--azul-dark); transform: translateY(-1px); }
 
     /* ─── FOOTER ─── */
     .aviso {
@@ -726,24 +816,73 @@
     footer a { color: var(--gris); text-decoration: none; }
     footer a:hover { color: var(--sub); }
 
+    /* ─── WHATSAPP FLOAT ─── */
+    .wa-float {
+      position: fixed; bottom: 28px; right: 28px; z-index: 300;
+      width: 52px; height: 52px; border-radius: 50%;
+      background: #25D366;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.45);
+      transition: transform .2s, box-shadow .2s;
+      text-decoration: none;
+    }
+    .wa-float:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(37,211,102,0.55);
+    }
+    .wa-float svg { width: 28px; height: 28px; fill: #fff; }
+
+    /* ─── MOBILE STICKY CTA ─── */
+    .mobile-sticky {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 300;
+      padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+      background: rgba(18,21,29,0.96);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      transform: translateY(100%);
+      transition: transform .3s ease;
+    }
+    .mobile-sticky.visible { transform: translateY(0); }
+    .btn-sticky {
+      display: block; width: 100%;
+      background: var(--azul); color: #fff;
+      font-size: 14px; font-weight: 600;
+      padding: 13px; border-radius: 10px;
+      text-align: center; text-decoration: none;
+      font-family: 'Inter', sans-serif;
+      transition: background .15s;
+    }
+    .btn-sticky:hover { background: var(--azul-dark); }
+
     /* ─── RESPONSIVE ─── */
     @media (max-width: 960px) {
-      .hero { grid-template-columns: 1fr; gap: 44px; padding: 96px 24px 56px; min-height: auto; }
-      .form-card { max-width: 480px; }
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 44px;
+        padding: calc(var(--nav-h) + 44px) 24px 64px;
+        min-height: auto;
+      }
+      .form-card { max-width: 520px; }
       .pasos { grid-template-columns: 1fr 1fr; }
-      .test-grid { grid-template-columns: 1fr; }
+      .pasos::before { display: none; }
+      .paso { padding: 0; margin-bottom: 36px; }
+      .test-grid { grid-template-columns: 1fr 1fr; }
       .wrap { padding: 0 24px; }
-      section { padding: 64px 0; }
+      section { padding: 68px 0; }
       nav { padding: 0 24px; }
-      .cta-section { padding: 72px 24px; }
+      .cta-section { padding: 76px 24px; }
       .aviso, footer { padding-left: 24px; padding-right: 24px; }
     }
     @media (max-width: 600px) {
       nav .nav-links a:not(.btn-nav) { display: none; }
-      .hero-nums { gap: 20px; }
-      .pasos { grid-template-columns: 1fr; gap: 1px; }
+      .hero-nums { gap: 22px; }
+      .pasos { grid-template-columns: 1fr; }
+      .test-grid { grid-template-columns: 1fr; }
       .frow { grid-template-columns: 1fr; }
-      footer { flex-direction: column; gap: 8px; text-align: center; }
+      footer { flex-direction: column; gap: 8px; text-align: center; padding-bottom: 88px; }
+      .wa-float { display: none; }
+      .mobile-sticky { display: block; }
     }
   </style>
 </head>
@@ -751,7 +890,7 @@
 
 <!-- NAV -->
 <nav>
-  <div class="logo">AltaMonotributo</div>
+  <a href="#" class="logo">Alta<span>Monotributo</span></a>
   <div class="nav-links">
     <a href="#como-funciona">Cómo funciona</a>
     <a href="acerca-de-nosotros.html">Nosotros</a>
@@ -768,20 +907,40 @@
     <div class="hero-left">
       <div class="hero-eyebrow">
         <span class="eyebrow-dot"></span>
-        <span class="eyebrow-text">+1.000 personas ya se dieron de alta con nosotros</span>
+        <span class="eyebrow-text">Disponible ahora · Tiempo estimado: 24hs hábiles</span>
       </div>
 
-      <h1>En 24hs hábiles<br>sos monotributista<br><em>y podés facturar.</em></h1>
+      <h1>Tu alta en el<br>monotributo,<br><em>sin tocar ARCA.</em></h1>
 
       <p class="hero-desc">
-        Completás el formulario en dos minutos. Nosotros gestionamos el trámite completo ante ARCA. Vos recibís la constancia oficial y arrancás a facturar.
+        Completás el formulario, coordinamos el pago y nuestro equipo hace el trámite completo. Vos no entrás a ningún portal ni tenés que lidiar con los impuestos.
       </p>
 
       <div class="hero-puntos">
-        <div class="punto"><span class="punto-check"></span>Constancia oficial en menos de 24hs hábiles</div>
-        <div class="punto"><span class="punto-check"></span>Empezás a facturar el mismo día</div>
-        <div class="punto"><span class="punto-check"></span>Categoría correcta para no pagar de más</div>
-        <div class="punto"><span class="punto-check"></span>Soporte por WhatsApp después del alta</div>
+        <div class="punto">
+          <span class="punto-check">
+            <svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#059669" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          Constancia oficial en menos de 24hs hábiles
+        </div>
+        <div class="punto">
+          <span class="punto-check">
+            <svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#059669" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          Categoría correcta según tu actividad e ingresos
+        </div>
+        <div class="punto">
+          <span class="punto-check">
+            <svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#059669" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          No te pedimos la clave fiscal por adelantado
+        </div>
+        <div class="punto">
+          <span class="punto-check">
+            <svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#059669" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          Soporte por WhatsApp después del alta
+        </div>
       </div>
 
       <div class="hero-aviso">
@@ -807,14 +966,22 @@
     <!-- Formulario -->
     <div class="form-card">
 
-      <div class="form-progress">
-        <div class="fpbar active" id="bar-1"></div>
-        <div class="fpbar" id="bar-2"></div>
+      <!-- Step indicator -->
+      <div class="form-stepper">
+        <div class="step-item active" id="step-item-1">
+          <div class="step-bubble active" id="step-bubble-1">1</div>
+          <span class="step-label">Tus datos</span>
+        </div>
+        <div class="step-line" id="step-line"></div>
+        <div class="step-item" id="step-item-2">
+          <div class="step-bubble" id="step-bubble-2">2</div>
+          <span class="step-label">Tu actividad</span>
+        </div>
       </div>
 
       <div class="form-top">
-        <h2 id="form-title">Arrancamos ahora</h2>
-        <p id="form-sub">Paso 1 de 2 · dos minutos y listo</p>
+        <h2 id="form-title">Empezamos con lo básico</h2>
+        <p id="form-sub">Paso 1 de 2 · menos de un minuto</p>
       </div>
 
       <!-- PASO 1 -->
@@ -823,6 +990,7 @@
           <div class="fgroup">
             <label for="nombre">Nombre</label>
             <input type="text" id="nombre" placeholder="Juan" autocomplete="given-name"/>
+            <div class="ferror" id="err-nombre">Ingresá tu nombre.</div>
           </div>
           <div class="fgroup">
             <label for="apellido">Apellido</label>
@@ -833,13 +1001,16 @@
           <label for="telefono">WhatsApp</label>
           <input type="tel" id="telefono" placeholder="11 1234-5678" autocomplete="tel"/>
           <div class="fnota">Te contactamos acá para coordinar el pago.</div>
+          <div class="ferror" id="err-telefono">Ingresá tu número de WhatsApp.</div>
         </div>
         <div class="fgroup">
           <label for="email">Email</label>
           <input type="email" id="email" placeholder="juan@ejemplo.com" autocomplete="email"/>
+          <div class="ferror" id="err-email">Ingresá un email válido.</div>
         </div>
-        <button class="btn-submit" onclick="irPaso2()">
-          Quiero darme de alta hoy
+        <button class="btn-submit" id="btn-p1" onclick="irPaso2()">
+          <div class="btn-spinner"></div>
+          <span class="btn-label">Continuar</span>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <div class="form-pie">
@@ -915,9 +1086,12 @@
             </svg>
           </div>
           <h3>Por ahora no podemos avanzar online</h3>
-          <p style="margin-bottom:14px;">Según tus respuestas, tu caso necesita una revisión particular. Escribinos por WhatsApp y te ayudamos igual.</p>
-          <a href="https://wa.me/5491100000000" target="_blank" rel="noopener" class="btn-submit" style="text-decoration:none;display:flex;">Hablar por WhatsApp</a>
-          <button type="button" class="btn-volver" onclick="volverDesdeNoApto()">← Volver a intentar</button>
+          <p>Según tus respuestas, tu caso necesita una revisión particular. Escribinos por WhatsApp y te ayudamos igual.</p>
+          <a href="https://wa.me/5491100000000" target="_blank" rel="noopener" class="btn-submit" style="text-decoration:none;display:flex;margin-top:16px;">Hablar por WhatsApp</a>
+          <button type="button" class="btn-volver" style="margin-top:4px;" onclick="volverDesdeNoApto()">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 6H4M4 6l2.5-2.5M4 6l2.5 2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Volver a intentar
+          </button>
         </div>
 
         <!-- APTO: transición -->
@@ -928,14 +1102,15 @@
             </svg>
           </div>
           <h3>¡Sos apto para el alta express!</h3>
-          <p style="margin-bottom:14px;">Ahora sí, últimos datos para armar tu trámite.</p>
-          <button type="button" class="btn-submit" onclick="mostrarWizardDatos()">Continuar</button>
+          <p>Ahora sí, últimos datos para armar tu trámite.</p>
+          <button type="button" class="btn-submit" style="margin-top:16px;" onclick="mostrarWizardDatos()">Continuar</button>
         </div>
 
         <!-- WIZARD DE DATOS -->
         <div id="wizard-datos" style="display:none;">
         <div class="filtro-progress"><div class="filtro-progress-fill" id="filtro-fill"></div></div>
 
+        <!-- 2.1 Clave fiscal -->
         <div class="filtro-step" id="filtro-1">
           <p class="filtro-q">¿Tenés Clave Fiscal?</p>
           <div class="filtro-opts">
@@ -949,6 +1124,7 @@
           </div>
         </div>
 
+        <!-- 2.2 Actividad -->
         <div class="filtro-step" id="filtro-2" style="display:none;">
           <p class="filtro-q">¿A qué te dedicás?</p>
           <div class="filtro-opts">
@@ -962,6 +1138,7 @@
           </div>
         </div>
 
+        <!-- 2.3 Rubro -->
         <div class="filtro-step" id="filtro-3" style="display:none;">
           <p class="filtro-q">Contanos tu rubro</p>
           <div class="fgroup">
@@ -973,6 +1150,7 @@
           </div>
         </div>
 
+        <!-- 2.4 Provincia -->
         <div class="filtro-step" id="filtro-4" style="display:none;">
           <p class="filtro-q">¿En qué provincia estás?</p>
           <div class="fgroup">
@@ -994,6 +1172,7 @@
           </div>
         </div>
 
+        <!-- 2.5 Local comercial -->
         <div class="filtro-step" id="filtro-5" style="display:none;">
           <p class="filtro-q">¿Tenés local comercial?</p>
           <div class="filtro-opts">
@@ -1006,6 +1185,7 @@
           </div>
         </div>
 
+        <!-- 2.6 DNI + CUIT -->
         <div class="filtro-step" id="filtro-6" style="display:none;">
           <p class="filtro-q">Últimos datos</p>
           <div class="fgroup">
@@ -1013,7 +1193,7 @@
             <input type="text" id="dni" placeholder="30123456" inputmode="numeric" oninput="soloNumeros(this); checkTextStep('dni',6)"/>
           </div>
           <div class="fgroup">
-            <label for="cuit">CUIT (opcional)</label>
+            <label for="cuit" style="letter-spacing:0;text-transform:none;font-size:11px;">CUIT <span style="color:#C4C9D4;font-weight:400;">(opcional)</span></label>
             <input type="text" id="cuit" placeholder="Si no tenés, lo gestionamos nosotros" inputmode="numeric" oninput="soloNumeros(this)"/>
           </div>
           <div class="filtro-nav">
@@ -1037,40 +1217,39 @@
           </svg>
         </div>
         <h3>¡Listo! Calificás para el alta express.</h3>
-        <p style="margin-bottom:14px;">Con tus datos ya tenemos todo lo que necesitamos. Confirmá para coordinar el pago y arrancar el trámite.</p>
-        <button class="btn-submit" onclick="enviarFormulario()">
-          Confirmar y continuar
+        <p>Con tus datos ya tenemos todo lo que necesitamos. Confirmá para coordinar el pago y arrancar el trámite.</p>
+        <button class="btn-submit" id="btn-p2" style="margin-top:16px;" onclick="enviarFormulario()">
+          <div class="btn-spinner"></div>
+          <span class="btn-label">Confirmar y continuar</span>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
 
       <!-- OK / Redirigiendo -->
       <div id="paso-ok" class="ok-state" style="display:none;">
-        <div class="ok-icon" style="background:#ECFDF5;">
+        <div class="ok-icon">
           <svg viewBox="0 0 24 24" fill="none" width="24" height="24">
             <circle cx="12" cy="12" r="9" stroke="#10B981" stroke-width="2"/>
             <path d="M12 7v5l3 3" stroke="#10B981" stroke-width="2" stroke-linecap="round"/>
           </svg>
         </div>
         <h3>Guardamos tus datos.</h3>
-        <p style="margin-bottom:14px;">Estás siendo redirigido a MercadoPago para completar el pago…</p>
-        <div style="width:100%;height:3px;background:var(--borde);border-radius:3px;overflow:hidden;">
-          <div style="height:3px;background:var(--azul);border-radius:3px;animation:loading-bar 1.2s ease-in-out forwards;"></div>
-        </div>
+        <p>Estás siendo redirigido a MercadoPago para completar el pago…</p>
+        <div class="ok-bar"><div class="ok-fill"></div></div>
       </div>
 
     </div><!-- /form-card -->
-  </div><!-- /hero inner -->
-</div><!-- /hero bg -->
+  </div><!-- /hero -->
+</div><!-- /hero-bg -->
 
 <!-- QUÉ ES EL MONOTRIBUTO (SEO) -->
 <section id="que-es-monotributo">
   <div class="wrap">
-    <h2 class="sec-h">¿Qué es el Monotributo y para qué sirve?</h2>
-    <p class="sec-sub" style="max-width:none;margin-top:8px;">El Monotributo es un régimen simplificado de impuestos en Argentina que permite a trabajadores independientes facturar y pagar impuestos con una cuota mensual fija.</p>
-    <p class="sec-sub" style="max-width:none;margin-top:12px;">El Monotributo es un régimen simplificado de impuestos administrado por ARCA (ex AFIP) que permite a trabajadores independientes, freelancers y pequeños negocios facturar y pagar impuestos mediante una cuota mensual fija. Incluye componentes impositivos, jubilatorios y de obra social según la categoría del contribuyente.</p>
-    <p class="sec-sub" style="max-width:none;margin-top:12px;font-weight:600;color:var(--texto);">Concentra en un único pago mensual los siguientes impuestos y aportes:</p>
-    <div class="mt-cards">
+    <h2 class="sec-h reveal">¿Qué es el Monotributo y para qué sirve?</h2>
+    <p class="sec-sub reveal" style="max-width:none;margin-top:8px;">El Monotributo es un régimen simplificado de impuestos en Argentina que permite a trabajadores independientes facturar y pagar impuestos con una cuota mensual fija.</p>
+    <p class="sec-sub reveal" style="max-width:none;margin-top:12px;">El Monotributo es un régimen simplificado de impuestos administrado por ARCA (ex AFIP) que permite a trabajadores independientes, freelancers y pequeños negocios facturar y pagar impuestos mediante una cuota mensual fija. Incluye componentes impositivos, jubilatorios y de obra social según la categoría del contribuyente.</p>
+    <p class="sec-sub reveal" style="max-width:none;margin-top:12px;font-weight:600;color:var(--texto);">Concentra en un único pago mensual los siguientes impuestos y aportes:</p>
+    <div class="mt-cards reveal">
       <div class="mt-card">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 20V10M12 20V4M20 20v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         <h3>IVA</h3>
@@ -1113,35 +1292,36 @@
   </div>
 </div>
 
+
 <!-- CÓMO FUNCIONA -->
 <section id="como-funciona" class="sec-dark">
   <div class="wrap">
-    <div class="sec-label on-dark">Cómo funciona</div>
-    <h2 class="sec-h on-dark">Sin burocracia ni vueltas.</h2>
-    <p class="sec-sub on-dark">No necesitás entender nada de ARCA. Cuatro pasos y listo.</p>
+    <div class="sec-label on-dark reveal">Cómo funciona</div>
+    <h2 class="sec-h on-dark reveal">Sin burocracia ni vueltas.</h2>
+    <p class="sec-sub on-dark reveal">No necesitás entender nada de ARCA. Cuatro pasos y listo.</p>
     <div class="pasos">
-      <div class="paso">
-        <div class="paso-num">01</div>
+      <div class="paso reveal reveal-d1">
+        <div class="paso-circle">01</div>
         <h3>Completás el formulario</h3>
         <p>Nombre, actividad y domicilio. Son dos minutos. Solo necesitás el DNI.</p>
       </div>
-      <div class="paso">
-        <div class="paso-num">02</div>
+      <div class="paso reveal reveal-d2">
+        <div class="paso-circle">02</div>
         <h3>Coordinamos el pago</h3>
         <p>Revisamos tus datos y te mandamos el link de MercadoPago por WhatsApp.</p>
       </div>
-      <div class="paso">
-        <div class="paso-num">03</div>
+      <div class="paso reveal reveal-d3">
+        <div class="paso-circle">03</div>
         <h3>Hacemos el trámite</h3>
         <p>Nuestro equipo gestiona el alta completa ante ARCA. Vos no entrás a ningún portal.</p>
       </div>
-      <div class="paso">
-        <div class="paso-num">04</div>
+      <div class="paso reveal reveal-d4">
+        <div class="paso-circle">04</div>
         <h3>Recibís la constancia</h3>
         <p>En menos de 24hs hábiles te enviamos el comprobante oficial. Podés facturar.</p>
       </div>
     </div>
-    <div style="margin-top:40px;text-align:center;">
+    <div class="reveal" style="margin-top:40px;text-align:center;">
       <a href="#formulario" class="btn-inline-cta">
         Empezar mi alta
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1154,10 +1334,10 @@
 <!-- QUÉ INCLUYE -->
 <section>
   <div class="wrap">
-    <div class="sec-label">Qué incluye</div>
-    <h2 class="sec-h">Un pago, todo resuelto.</h2>
-    <p class="sec-sub">Sin cobros extras después. Lo que acordamos es lo que pasa.</p>
-    <div class="incluye-list">
+    <div class="sec-label reveal">Qué incluye</div>
+    <h2 class="sec-h reveal">Un pago, todo resuelto.</h2>
+    <p class="sec-sub reveal">Sin cobros extras después. Lo que acordamos es lo que pasa.</p>
+    <div class="incluye-list reveal">
       <div class="incluye-row">
         <div class="inc-n">01</div>
         <div class="inc-body">
@@ -1187,7 +1367,7 @@
         </div>
       </div>
     </div>
-    <div style="margin-top:32px;">
+    <div class="reveal" style="margin-top:32px;">
       <a href="#formulario" class="btn-inline-cta">
         Empezar mi alta
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1198,13 +1378,20 @@
 
 
 <!-- TESTIMONIOS -->
-<section style="background: var(--fondo); border-top: 1px solid var(--borde); border-bottom: 1px solid var(--borde);">
+<section style="background:var(--fondo);border-top:1px solid var(--borde);border-bottom:1px solid var(--borde);">
   <div class="wrap">
-    <div class="sec-label">Lo que dicen</div>
-    <h2 class="sec-h">Gente que ya lo resolvió.</h2>
+    <div class="sec-label reveal">Lo que dicen</div>
+    <h2 class="sec-h reveal">Gente que ya lo resolvió.</h2>
     <div class="test-grid">
-      <div class="test-card">
-        <div class="test-quote">"</div>
+
+      <div class="test-card reveal reveal-d1">
+        <div class="test-stars">
+          <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.72l-4 3.9.94 5.49L10 13.4l-4.94 2.71.94-5.49-4-3.9 5.61-.88z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.72l-4 3.9.94 5.49L10 13.4l-4.94 2.71.94-5.49-4-3.9 5.61-.88z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.72l-4 3.9.94 5.49L10 13.4l-4.94 2.71.94-5.49-4-3.9 5.61-.88z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.72l-4 3.9.94 5.49L10 13.4l-4.94 2.71.94-5.49-4-3.9 5.61-.88z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.72l-4 3.9.94 5.49L10 13.4l-4.94 2.71.94-5.49-4-3.9 5.61-.88z"/></svg>
+        </div>
         <p>Llevaba meses postergándolo porque me parecía un trámite complicado. Lo resolví en un rato y el mismo día me mandaron la constancia.</p>
         <div class="test-info">
           <div class="test-avatar">LM</div>
@@ -1214,8 +1401,15 @@
           </div>
         </div>
       </div>
-      <div class="test-card">
-        <div class="test-quote">"</div>
+
+      <div class="test-card reveal reveal-d2">
+        <div class="test-stars">
+          <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.72l-4 3.9.94 5.49L10 13.4l-4.94 2.71.94-5.49-4-3.9 5.61-.88z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.72l-4 3.9.94 5.49L10 13.4l-4.94 2.71.94-5.49-4-3.9 5.61-.88z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.72l-4 3.9.94 5.49L10 13.4l-4.94 2.71.94-5.49-4-3.9 5.61-.88z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.72l-4 3.9.94 5.49L10 13.4l-4.94 2.71.94-5.49-4-3.9 5.61-.88z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.72l-4 3.9.94 5.49L10 13.4l-4.94 2.71.94-5.49-4-3.9 5.61-.88z"/></svg>
+        </div>
         <p>Arranqué a hacer delivery y necesitaba facturar urgente. Me explicaron todo sin hacerme sentir que no sabía nada. Muy buena onda.</p>
         <div class="test-info">
           <div class="test-avatar">MR</div>
@@ -1225,8 +1419,15 @@
           </div>
         </div>
       </div>
-      <div class="test-card">
-        <div class="test-quote">"</div>
+
+      <div class="test-card reveal reveal-d3">
+        <div class="test-stars">
+          <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.72l-4 3.9.94 5.49L10 13.4l-4.94 2.71.94-5.49-4-3.9 5.61-.88z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.72l-4 3.9.94 5.49L10 13.4l-4.94 2.71.94-5.49-4-3.9 5.61-.88z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.72l-4 3.9.94 5.49L10 13.4l-4.94 2.71.94-5.49-4-3.9 5.61-.88z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.72l-4 3.9.94 5.49L10 13.4l-4.94 2.71.94-5.49-4-3.9 5.61-.88z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.72l-4 3.9.94 5.49L10 13.4l-4.94 2.71.94-5.49-4-3.9 5.61-.88z"/></svg>
+        </div>
         <p>Me daba paja meterme en el portal de ARCA. Acá completé el formulario en dos minutos y listo. No tuve que hacer nada más.</p>
         <div class="test-info">
           <div class="test-avatar">VS</div>
@@ -1236,6 +1437,7 @@
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </section>
@@ -1244,10 +1446,10 @@
 <!-- MÁS SOBRE EL MONOTRIBUTO (SEO) -->
 <section id="mas-monotributo">
   <div class="wrap">
-    <div class="sec-label">Monotributo 101</div>
-    <h2 class="sec-h">Más sobre el Monotributo</h2>
-    <p class="sec-sub">Lo que tenés que saber antes de inscribirte.</p>
-    <div class="incluye-list">
+    <div class="sec-label reveal">Monotributo 101</div>
+    <h2 class="sec-h reveal">Más sobre el Monotributo</h2>
+    <p class="sec-sub reveal">Lo que tenés que saber antes de inscribirte.</p>
+    <div class="incluye-list reveal">
       <div class="incluye-row">
         <div class="inc-n">01</div>
         <div class="inc-body">
@@ -1277,10 +1479,10 @@
 <!-- ACERCA DE NOSOTROS (teaser) -->
 <section id="nosotros" class="sec-dark">
   <div class="wrap" style="text-align:center;">
-    <div class="sec-label on-dark" style="margin-left:auto;margin-right:auto;">Acerca de nosotros</div>
-    <h2 class="sec-h on-dark">Un equipo real, no un formulario automático.</h2>
-    <p class="sec-sub on-dark" style="max-width:560px;margin:0 auto;">AltaMonotributo.com es un servicio privado de asistencia para monotributistas en Argentina. Un asesor te acompaña por WhatsApp en cada paso del trámite.</p>
-    <div style="margin-top:24px;">
+    <div class="sec-label on-dark reveal" style="margin-left:auto;margin-right:auto;">Acerca de nosotros</div>
+    <h2 class="sec-h on-dark reveal">Un equipo real, no un formulario automático.</h2>
+    <p class="sec-sub on-dark reveal" style="max-width:560px;margin:0 auto;">AltaMonotributo.com es un servicio privado de asistencia para monotributistas en Argentina. Un asesor te acompaña por WhatsApp en cada paso del trámite.</p>
+    <div class="reveal" style="margin-top:24px;">
       <a href="acerca-de-nosotros.html" class="btn-inline-cta">
         Conocer más sobre nosotros
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1293,33 +1495,70 @@
 <!-- FAQ -->
 <section id="faq">
   <div class="wrap">
-    <div class="sec-label">Preguntas frecuentes</div>
-    <h2 class="sec-h">Las dudas más comunes.</h2>
-    <div class="faq-list">
-      <details>
-        <summary>¿Cuánto tarda? <span class="sum-icon">+</span></summary>
-        <div class="faq-body">En la mayoría de los casos lo resolvemos el mismo día. El plazo máximo es 24 horas hábiles desde que confirmamos el pago.</div>
-      </details>
-      <details>
-        <summary>¿Necesito CUIT y clave fiscal? <span class="sum-icon">+</span></summary>
-        <div class="faq-body">La clave fiscal la necesitás para el alta, sí. Si no la tenés, te explicamos cómo sacarla con la app ARCA Móvil — es rápido. El CUIT también lo podemos gestionar si no lo tenés.</div>
-      </details>
-      <details>
-        <summary>¿Por qué les tengo que dar mi clave fiscal? <span class="sum-icon">+</span></summary>
-        <div class="faq-body">Es la única forma de operar en ARCA en tu nombre. A diferencia de otros servicios, te la pedimos <strong>después de confirmar el pago</strong>, nunca antes. Trabajamos con delegación de acceso temporal, que podés revocar cuando quieras desde la app. Tu información es confidencial.</div>
-      </details>
-      <details>
-        <summary>¿Puedo tener empleo en relación de dependencia y también monotributo? <span class="sum-icon">+</span></summary>
-        <div class="faq-body">Sí, es perfectamente legal y muy común. Si tenés aportes jubilatorios por tu trabajo en relación de dependencia, podés inscribirte al monotributo con opción de solo obra social.</div>
-      </details>
-      <details>
-        <summary>¿Qué pasa si me dieron de baja antes? <span class="sum-icon">+</span></summary>
-        <div class="faq-body">Podés reinscribirte. Según cómo fue la baja puede haber algún paso adicional, pero lo manejamos igual. Completá el formulario y te contamos cómo sigue.</div>
-      </details>
-      <details>
-        <summary>¿Son un sistema automático o hay personas detrás? <span class="sum-icon">+</span></summary>
-        <div class="faq-body">Hay personas reales detrás de cada trámite. El servicio es gestionado por el equipo de <strong>Tributo Simple</strong>, plataforma con miles de usuarios activos en Argentina. Nada es automático: si algo no cierra, te avisamos.</div>
-      </details>
+    <div class="sec-label reveal">Preguntas frecuentes</div>
+    <h2 class="sec-h reveal">Las dudas más comunes.</h2>
+    <div class="faq-list reveal">
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          ¿Cuánto tarda?
+          <span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M6 2v8M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+        </button>
+        <div class="faq-content">
+          <div class="faq-body">En la mayoría de los casos lo resolvemos el mismo día. El plazo máximo es 24 horas hábiles desde que confirmamos el pago.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          ¿Necesito CUIT y clave fiscal?
+          <span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M6 2v8M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+        </button>
+        <div class="faq-content">
+          <div class="faq-body">La clave fiscal la necesitás para el alta, sí. Si no la tenés, te explicamos cómo sacarla con la app ARCA Móvil — es rápido. El CUIT también lo podemos gestionar si no lo tenés.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          ¿Por qué les tengo que dar mi clave fiscal?
+          <span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M6 2v8M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+        </button>
+        <div class="faq-content">
+          <div class="faq-body">Es la única forma de operar en ARCA en tu nombre. A diferencia de otros servicios, te la pedimos <strong>después de confirmar el pago</strong>, nunca antes. Trabajamos con delegación de acceso temporal, que podés revocar cuando quieras desde la app. Tu información es confidencial.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          ¿Puedo tener empleo en relación de dependencia y también monotributo?
+          <span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M6 2v8M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+        </button>
+        <div class="faq-content">
+          <div class="faq-body">Sí, es perfectamente legal y muy común. Si tenés aportes jubilatorios por tu trabajo en relación de dependencia, podés inscribirte al monotributo con opción de solo obra social.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          ¿Qué pasa si me dieron de baja antes?
+          <span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M6 2v8M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+        </button>
+        <div class="faq-content">
+          <div class="faq-body">Podés reinscribirte. Según cómo fue la baja puede haber algún paso adicional, pero lo manejamos igual. Completá el formulario y te contamos cómo sigue.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          ¿Son un sistema automático o hay personas detrás?
+          <span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M6 2v8M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+        </button>
+        <div class="faq-content">
+          <div class="faq-body">Hay personas reales detrás de cada trámite. El servicio es gestionado por el equipo de <strong>Tributo Simple</strong>, plataforma con miles de usuarios activos en Argentina. Nada es automático: si algo no cierra, te avisamos.</div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -1329,7 +1568,10 @@
 <div class="cta-section">
   <h2>¿Arrancamos hoy?<br><em>Menos de 24hs y listo.</em></h2>
   <p>Completá el formulario, coordinamos el pago y nosotros hacemos el resto.</p>
-  <a href="#formulario" class="btn-cta-white">Quiero darme de alta →</a>
+  <a href="#formulario" class="btn-cta-white">
+    Quiero darme de alta
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
 </div>
 
 <!-- AVISO LEGAL -->
@@ -1340,94 +1582,146 @@
 
 <footer>
   <div>© 2026 AltaMonotributo</div>
-  <div style="display:flex; gap: 16px;">
+  <div style="display:flex;gap:16px;">
     <a href="#">Términos y condiciones</a>
     <a href="#">Política de privacidad</a>
   </div>
 </footer>
 
+<!-- WhatsApp Float — reemplazá el número por el tuyo -->
+<a href="https://wa.me/5491100000000" class="wa-float" target="_blank" rel="noopener" aria-label="Consultá por WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<!-- Mobile Sticky CTA -->
+<div class="mobile-sticky" id="mobile-sticky">
+  <a href="#formulario" class="btn-sticky">Quiero darme de alta →</a>
+</div>
+
 
 <script>
   const CRM_WEBHOOK = 'https://TU_WEBHOOK_AQUI';
-  const MP_LINK = 'https://mpago.la/TU_LINK_DE_PAGO'; // ← reemplazá con tu link de MercadoPago
+  const MP_LINK     = 'https://mpago.la/TU_LINK_DE_PAGO'; // ← reemplazá con tu link de MercadoPago
   let leadData = {};
 
-  let preData = {};
+  /* ─── Validation helpers ─── */
+  function showErr(fieldId, msg) {
+    const errEl = document.getElementById('err-' + fieldId);
+    const input  = document.getElementById(fieldId);
+    if (errEl)  { errEl.textContent = msg; errEl.classList.add('show'); }
+    if (input)  { input.classList.add('has-error'); }
+  }
+  function clearErr(fieldId) {
+    const errEl = document.getElementById('err-' + fieldId);
+    const input  = document.getElementById(fieldId);
+    if (errEl)  errEl.classList.remove('show');
+    if (input)  input.classList.remove('has-error');
+  }
+  function shakeCard() {
+    const card = document.querySelector('.form-card');
+    card.classList.add('do-shake');
+    card.addEventListener('animationend', () => card.classList.remove('do-shake'), { once: true });
+  }
+
+  // Clear errors on user interaction
+  ['nombre','apellido','telefono','email'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input',  () => clearErr(id));
+    el.addEventListener('change', () => clearErr(id));
+  });
+
+  /* ─── Filtro rápido (datos, paso 2): estado ─── */
   let filtroData = {};
+  const TOTAL_FILTRO_STEPS = 6;
 
-  function irPaso2() {
-    const nombre   = document.getElementById('nombre').value.trim();
-    const apellido = document.getElementById('apellido').value.trim();
-    const telefono = document.getElementById('telefono').value.trim();
-    const email    = document.getElementById('email').value.trim();
-    if (!nombre || !telefono || !email) {
-      alert('Completá nombre, WhatsApp y email para continuar.');
-      return;
-    }
-    leadData = { nombre, apellido, telefono, email, estado: 'paso_1', ts: new Date().toISOString() };
-    enviarAlCRM(leadData);
-    resetFiltro();
-    resetPreFiltro();
-    document.getElementById('paso-1').style.display = 'none';
-    document.getElementById('paso-2').style.display = 'block';
-    document.getElementById('bar-2').classList.add('active');
-    document.getElementById('form-title').textContent = '¿Calificás para el alta express?';
-    document.getElementById('form-sub').textContent = 'Unas preguntas rápidas';
-    document.getElementById('formulario').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  function updateFiltroProgress(step) {
+    document.getElementById('filtro-fill').style.width = (step / TOTAL_FILTRO_STEPS * 100) + '%';
   }
 
-  function volverPaso1() {
-    document.getElementById('paso-2').style.display = 'none';
-    document.getElementById('paso-1').style.display = 'block';
-    document.getElementById('bar-2').classList.remove('active');
-    document.getElementById('form-title').textContent = 'Empezamos con lo básico';
-    document.getElementById('form-sub').textContent = 'Paso 1 de 2 · menos de un minuto';
+  function selectOpt(btn, step) {
+    btn.parentElement.querySelectorAll('.opt-card').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    filtroData[btn.dataset.field] = btn.dataset.value;
+    document.getElementById('next-' + step).disabled = false;
   }
 
-  // ── PRE-FILTRO (calificación) ──
-  const TOTAL_PRE_STEPS = 3;
+  function checkTextStep(fieldId, step) {
+    const val = document.getElementById(fieldId).value.trim();
+    filtroData[fieldId] = val;
+    document.getElementById('next-' + step).disabled = !val;
+  }
 
-  function resetPreFiltro() {
-    preData = {};
-    for (let i = 1; i <= TOTAL_PRE_STEPS; i++) {
-      document.getElementById('pre-' + i).style.display = i === 1 ? 'block' : 'none';
+  function filtroSiguiente(step) {
+    document.getElementById('filtro-' + step).style.display = 'none';
+    document.getElementById('filtro-' + (step + 1)).style.display = 'block';
+    updateFiltroProgress(step + 1);
+  }
+
+  function filtroAnterior(step) {
+    document.getElementById('filtro-' + step).style.display = 'none';
+    document.getElementById('filtro-' + (step - 1)).style.display = 'block';
+    updateFiltroProgress(step - 1);
+  }
+
+  function resetFiltro() {
+    filtroData = {};
+    for (let i = 1; i <= TOTAL_FILTRO_STEPS; i++) {
+      document.getElementById('filtro-' + i).style.display = (i === 1 ? 'block' : 'none');
     }
-    document.getElementById('pre-2b').style.display = 'none';
-    document.getElementById('pre-no-apto').style.display = 'none';
-    document.getElementById('pre-apto').style.display = 'none';
+    document.querySelectorAll('#wizard-datos .opt-card').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('#wizard-datos .filtro-next').forEach(b => b.disabled = true);
+    updateFiltroProgress(1);
     document.getElementById('wizard-datos').style.display = 'none';
-    document.getElementById('monto-wrap').style.display = 'none';
-    document.getElementById('monto_estimado').value = '';
-    document.querySelectorAll('#pre-1 .opt-card, #pre-2 .opt-card, #pre-2b .opt-card, #pre-3 .opt-card').forEach(b => b.classList.remove('selected'));
-    document.getElementById('pre-next-1').disabled = true;
-    document.getElementById('pre-next-2').disabled = true;
-    document.getElementById('pre-next-2b').disabled = true;
-    document.getElementById('pre-next-3').disabled = true;
-    updatePreProgress(1);
   }
+
+  /* ─── PRE-FILTRO: calificación tipo monotributo.com ─── */
+  let preData = {};
+  const TOTAL_PRE_STEPS = 3;
 
   function updatePreProgress(step) {
     document.getElementById('pre-fill').style.width = (step / TOTAL_PRE_STEPS * 100) + '%';
   }
 
+  function resetPreFiltro() {
+    preData = {};
+    for (let i = 1; i <= TOTAL_PRE_STEPS; i++) {
+      document.getElementById('pre-' + i).style.display = (i === 1 ? 'block' : 'none');
+    }
+    document.getElementById('pre-2b').style.display = 'none';
+    document.getElementById('pre-no-apto').style.display = 'none';
+    document.getElementById('pre-apto').style.display = 'none';
+    document.getElementById('monto-wrap').style.display = 'none';
+    document.getElementById('monto_estimado').value = '';
+    document.querySelectorAll('#pre-1,#pre-2,#pre-2b,#pre-3').forEach(el => {
+      el.querySelectorAll('.opt-card').forEach(b => b.classList.remove('selected'));
+    });
+    document.querySelectorAll('#pre-1,#pre-2,#pre-2b,#pre-3').forEach(el => {
+      const btn = el.querySelector('.filtro-next');
+      if (btn) btn.disabled = true;
+    });
+    updatePreProgress(1);
+  }
+
   function selectPre(btn, step) {
-    const field = btn.dataset.field, value = btn.dataset.value;
-    preData[field] = value;
     btn.parentElement.querySelectorAll('.opt-card').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
+    preData[btn.dataset.field] = btn.dataset.value;
     document.getElementById('pre-next-' + step).disabled = false;
   }
 
   function selectPreMonto(btn) {
-    const value = btn.dataset.value;
-    preData.sabe_facturacion = value;
     btn.parentElement.querySelectorAll('.opt-card').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
-    if (value === 'si') {
-      document.getElementById('monto-wrap').style.display = 'block';
-      checkMonto();
+    preData.sabe_facturacion = btn.dataset.value;
+    const montoWrap = document.getElementById('monto-wrap');
+    if (btn.dataset.value === 'si') {
+      montoWrap.style.display = 'block';
+      document.getElementById('pre-next-3').disabled = !document.getElementById('monto_estimado').value.trim();
     } else {
-      document.getElementById('monto-wrap').style.display = 'none';
+      montoWrap.style.display = 'none';
       document.getElementById('pre-next-3').disabled = false;
     }
   }
@@ -1457,7 +1751,7 @@
   }
 
   function preSiguienteExtranjero() {
-    if (preData.tiene_precaria === 'no') { mostrarNoApto(); return; }
+    if (preData.tiene_precaria === 'no') { return mostrarNoApto(); }
     document.getElementById('pre-2b').style.display = 'none';
     document.getElementById('pre-3').style.display = 'block';
     updatePreProgress(3);
@@ -1481,93 +1775,118 @@
   }
 
   function mostrarNoApto() {
-    for (let i = 1; i <= TOTAL_PRE_STEPS; i++) document.getElementById('pre-' + i).style.display = 'none';
+    for (let i = 1; i <= TOTAL_PRE_STEPS; i++) {
+      document.getElementById('pre-' + i).style.display = 'none';
+    }
     document.getElementById('pre-2b').style.display = 'none';
     document.getElementById('pre-no-apto').style.display = 'block';
-    enviarAlCRM({ ...leadData, ...preData, estado: 'no_apto', ts: new Date().toISOString() });
+    leadData = { ...leadData, ...preData, estado: 'no_apto', ts: new Date().toISOString() };
+    enviarAlCRM(leadData);
+    document.getElementById('form-title').textContent = 'No calificás por este medio';
+    document.getElementById('form-sub').textContent   = '';
   }
 
   function volverDesdeNoApto() {
     document.getElementById('pre-no-apto').style.display = 'none';
     resetPreFiltro();
     document.getElementById('form-title').textContent = '¿Calificás para el alta express?';
-    document.getElementById('form-sub').textContent = 'Unas preguntas rápidas';
+    document.getElementById('form-sub').textContent   = 'Unas preguntas cortas y listo';
   }
 
   function finPreFiltro() {
-    document.getElementById('pre-3').style.display = 'none';
+    for (let i = 1; i <= TOTAL_PRE_STEPS; i++) {
+      document.getElementById('pre-' + i).style.display = 'none';
+    }
     document.getElementById('pre-apto').style.display = 'block';
-    enviarAlCRM({ ...leadData, ...preData, estado: 'apto', ts: new Date().toISOString() });
+    leadData = { ...leadData, ...preData, estado: 'apto', ts: new Date().toISOString() };
+    enviarAlCRM(leadData);
   }
 
   function mostrarWizardDatos() {
     document.getElementById('pre-apto').style.display = 'none';
     document.getElementById('wizard-datos').style.display = 'block';
-    document.getElementById('form-title').textContent = 'Últimos datos';
-    document.getElementById('form-sub').textContent = 'Ya casi terminamos';
+    document.getElementById('form-title').textContent = 'Tu actividad';
+    document.getElementById('form-sub').textContent   = 'Últimos datos para tu trámite';
   }
 
-  // ── WIZARD DE DATOS ──
-  function resetFiltro() {
-    filtroData = {};
-    for (let i = 1; i <= 6; i++) {
-      document.getElementById('filtro-' + i).style.display = i === 1 ? 'block' : 'none';
-      const nextBtn = document.getElementById('next-' + i);
-      if (nextBtn) nextBtn.disabled = true;
-    }
-    document.querySelectorAll('#wizard-datos .opt-card').forEach(b => b.classList.remove('selected'));
-    updateFiltroProgress(1);
-  }
+  /* ─── Step 1 → Filtro rápido ─── */
+  function irPaso2() {
+    const nombre   = document.getElementById('nombre').value.trim();
+    const telefono = document.getElementById('telefono').value.trim();
+    const email    = document.getElementById('email').value.trim();
+    let ok = true;
+    if (!nombre)                       { showErr('nombre',   'Ingresá tu nombre.');           ok = false; }
+    if (!telefono)                     { showErr('telefono', 'Ingresá tu número de WhatsApp.'); ok = false; }
+    if (!email || !/\S+@\S+\.\S+/.test(email)) { showErr('email', 'Ingresá un email válido.');  ok = false; }
+    if (!ok) { shakeCard(); return; }
 
-  function updateFiltroProgress(step) {
-    document.getElementById('filtro-fill').style.width = (step * 16.66) + '%';
-  }
-
-  function selectOpt(btn, step) {
-    const field = btn.dataset.field, value = btn.dataset.value;
-    filtroData[field] = value;
-    btn.parentElement.querySelectorAll('.opt-card').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-    document.getElementById('next-' + step).disabled = false;
-  }
-
-  function checkTextStep(field, step) {
-    const el = document.getElementById(field);
-    const v = el.value.trim();
-    filtroData[field] = v;
-    document.getElementById('next-' + step).disabled = !v;
-  }
-
-  function filtroSiguiente(step) {
-    document.getElementById('filtro-' + step).style.display = 'none';
-    document.getElementById('filtro-' + (step + 1)).style.display = 'block';
-    updateFiltroProgress(step + 1);
-  }
-
-  function filtroAnterior(step) {
-    document.getElementById('filtro-' + step).style.display = 'none';
-    document.getElementById('filtro-' + (step - 1)).style.display = 'block';
-    updateFiltroProgress(step - 1);
-  }
-
-  function mostrarCalificacion() {
-    const dni = document.getElementById('dni').value.trim();
-    filtroData.dni = dni;
-    filtroData.cuit = document.getElementById('cuit').value.trim();
-    enviarAlCRM({ ...leadData, ...preData, ...filtroData, estado: 'calificado', ts: new Date().toISOString() });
-    document.getElementById('paso-2').style.display = 'none';
-    document.getElementById('paso-cal').style.display = 'block';
-  }
-
-  function enviarFormulario() {
+    // Guardamos el lead YA en el CRM, aunque no termine el resto del formulario
     leadData = {
-      ...leadData, ...preData, ...filtroData,
-      estado: 'completo',
-      ts: new Date().toISOString()
+      nombre, apellido: document.getElementById('apellido').value.trim(),
+      telefono, email, estado: 'paso_1', ts: new Date().toISOString()
     };
     enviarAlCRM(leadData);
 
-    // Conversión Google Ads — se dispara cuando el usuario va a pagar
+    resetFiltro();
+    resetPreFiltro();
+
+    // Show filtro rápido
+    document.getElementById('paso-1').style.display = 'none';
+    document.getElementById('paso-2').style.display = 'block';
+
+    // Update stepper: step 1 → done, step 2 → active
+    const b1 = document.getElementById('step-bubble-1');
+    b1.className = 'step-bubble done';
+    b1.innerHTML = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    document.getElementById('step-bubble-2').className = 'step-bubble active';
+    document.getElementById('step-line').className = 'step-line done';
+    document.getElementById('step-item-1').className = 'step-item';
+    document.getElementById('step-item-2').className = 'step-item active';
+    document.getElementById('form-title').textContent = '¿Calificás para el alta express?';
+    document.getElementById('form-sub').textContent   = 'Unas preguntas cortas y listo';
+    document.getElementById('formulario').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* ─── Filtro rápido → Step 1 ─── */
+  function volverPaso1() {
+    document.getElementById('paso-2').style.display = 'none';
+    document.getElementById('paso-1').style.display = 'block';
+    const b1 = document.getElementById('step-bubble-1');
+    b1.className = 'step-bubble active';
+    b1.textContent = '1';
+    document.getElementById('step-bubble-2').className = 'step-bubble';
+    document.getElementById('step-line').className = 'step-line';
+    document.getElementById('step-item-1').className = 'step-item active';
+    document.getElementById('step-item-2').className = 'step-item';
+    document.getElementById('form-title').textContent = 'Empezamos con lo básico';
+    document.getElementById('form-sub').textContent   = 'Paso 1 de 2 · menos de un minuto';
+  }
+
+  /* ─── Fin del filtro de datos → pantalla de calificación final ─── */
+  function mostrarCalificacion() {
+    filtroData.dni  = document.getElementById('dni').value.trim();
+    filtroData.cuit = document.getElementById('cuit').value.trim();
+
+    leadData = { ...leadData, ...filtroData, estado: 'calificado', ts: new Date().toISOString() };
+    enviarAlCRM(leadData);
+
+    document.getElementById('paso-2').style.display   = 'none';
+    document.getElementById('paso-cal').style.display = 'block';
+    document.getElementById('form-title').textContent = '¡Casi listo!';
+    document.getElementById('form-sub').textContent   = '';
+  }
+
+  /* ─── Confirmar y continuar al pago ─── */
+  function enviarFormulario() {
+    // Loading state
+    const btn = document.getElementById('btn-p2');
+    btn.classList.add('loading');
+    btn.disabled = true;
+
+    leadData = { ...leadData, ...filtroData, estado: 'completo', ts: new Date().toISOString() };
+    enviarAlCRM(leadData);
+
+    // Google Ads + GA4 conversion
     // Reemplazá AW-XXXXXXXXXX/XXXXXXXXXXXX con tu ID y etiqueta de conversión
     if (typeof gtag !== 'undefined') {
       gtag('event', 'conversion', {
@@ -1575,30 +1894,20 @@
         'value': 60000,
         'currency': 'ARS'
       });
-    }
-
-    // Evento GA4 para ver en Analytics
-    if (typeof gtag !== 'undefined') {
       gtag('event', 'generate_lead', {
         'event_category': 'formulario',
-        'event_label': 'alta_monotributo_v2'
+        'event_label': 'alta_monotributo'
       });
     }
 
-    // Mostrar estado de carga mientras redirige
+    // Show OK state
     document.getElementById('paso-cal').style.display = 'none';
-    document.getElementById('paso-ok').style.display = 'block';
-    document.getElementById('bar-1').style.background = '#059669';
-    document.getElementById('bar-2').style.background = '#059669';
-    document.getElementById('form-title').textContent = 'Redirigiendo al pago…';
-    document.getElementById('form-sub').textContent = '';
+    document.getElementById('paso-ok').style.display  = 'block';
 
-    // Redirigir a MercadoPago
-    setTimeout(() => {
-      window.location.href = MP_LINK;
-    }, 1200);
+    setTimeout(() => { window.location.href = MP_LINK; }, 1200);
   }
 
+  /* ─── CRM ─── */
   function enviarAlCRM(data) {
     if (!CRM_WEBHOOK || CRM_WEBHOOK.includes('TU_WEBHOOK')) return;
     fetch(CRM_WEBHOOK, {
@@ -1607,6 +1916,20 @@
       body: JSON.stringify(data)
     }).catch(() => {});
   }
+
+  /* ─── FAQ accordion ─── */
+  function toggleFaq(btn) {
+    const item   = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  /* ─── Scroll reveal ─── */
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
   /* ─── Stats: contador animado ─── */
   function animateStat(el) {
@@ -1638,6 +1961,14 @@
     }, { threshold: 0.4 });
     statsObs.observe(statsBandEl);
   }
+
+  /* ─── Mobile sticky CTA ─── */
+  const heroSection = document.getElementById('formulario');
+  const stickyBar   = document.getElementById('mobile-sticky');
+  new IntersectionObserver((entries) => {
+    stickyBar.classList.toggle('visible', !entries[0].isIntersecting);
+  }, { threshold: 0 }).observe(heroSection);
 </script>
+
 </body>
 </html>
