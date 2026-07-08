@@ -1236,6 +1236,9 @@
         <h3>Guardamos tus datos.</h3>
         <p>Estás siendo redirigido a MercadoPago para completar el pago…</p>
         <div class="ok-bar"><div class="ok-fill"></div></div>
+        <a href="#" id="link-pago-manual" class="btn-submit" style="text-decoration:none;display:flex;margin-top:16px;" target="_blank" rel="noopener">
+          ¿No pasó nada? Ir a MercadoPago →
+        </a>
       </div>
 
     </div><!-- /form-card -->
@@ -1606,6 +1609,8 @@
   const MP_LINK     = 'https://mpago.la/1BGHetV';
   const VARIANTE    = 'A';
   let leadData = {};
+  const linkPagoManual = document.getElementById('link-pago-manual');
+  if (linkPagoManual) linkPagoManual.href = MP_LINK;
 
   /* ─── Tracking: captura GCLID + UTMs para atribución de Google Ads ─── */
   /* El pago se confirma fuera de la web (WhatsApp + MercadoPago), así que la
