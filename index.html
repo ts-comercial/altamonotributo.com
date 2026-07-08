@@ -966,8 +966,23 @@
     <!-- Formulario -->
     <div class="form-card">
 
+      <!-- YA COMPLETASTE: se muestra si localStorage indica que este navegador ya terminó el formulario -->
+      <div id="ya-completo" class="ok-state" style="display:none;">
+        <div class="ok-icon">
+          <svg viewBox="0 0 24 24" fill="none" width="24" height="24">
+            <path d="M20 6L9 17l-5-5" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>Ya completaste tu solicitud.</h3>
+        <p>Guardamos tus datos. Si todavía no pagaste, continuá acá:</p>
+        <a href="#" id="link-pago-completo" class="btn-submit" style="text-decoration:none;display:flex;margin-top:16px;" target="_blank" rel="noopener">
+          Ir a MercadoPago →
+        </a>
+        <button type="button" class="btn-volver" id="btn-empezar-de-nuevo" style="margin-top:4px;">¿Sos otra persona? Empezar de nuevo</button>
+      </div>
+
       <!-- Step indicator -->
-      <div class="form-stepper">
+      <div class="form-stepper" id="form-stepper">
         <div class="step-item active" id="step-item-1">
           <div class="step-bubble active" id="step-bubble-1">1</div>
           <span class="step-label">Tus datos</span>
@@ -979,7 +994,7 @@
         </div>
       </div>
 
-      <div class="form-top">
+      <div class="form-top" id="form-top">
         <h2 id="form-title">Empezamos con lo básico</h2>
         <p id="form-sub">Paso 1 de 2 · menos de un minuto</p>
       </div>
@@ -1612,6 +1627,29 @@
   const linkPagoManual = document.getElementById('link-pago-manual');
   if (linkPagoManual) linkPagoManual.href = MP_LINK;
 
+  /* ─── "Ya completaste": si este navegador ya mandó el formulario, no lo
+     hacemos empezar de cero al refrescar — le mostramos el link de pago. ─── */
+  function marcarCompletado() {
+    try {
+      localStorage.setItem('ts_completado', JSON.stringify({ link: MP_LINK, ts: new Date().toISOString() }));
+    } catch (e) {}
+  }
+  function chequearYaCompleto() {
+    let done = null;
+    try { done = JSON.parse(localStorage.getItem('ts_completado') || 'null'); } catch (e) {}
+    if (!done || !done.link) return;
+    document.getElementById('form-stepper').style.display = 'none';
+    document.getElementById('form-top').style.display = 'none';
+    document.getElementById('paso-1').style.display = 'none';
+    document.getElementById('link-pago-completo').href = done.link;
+    document.getElementById('ya-completo').style.display = 'block';
+  }
+  document.getElementById('btn-empezar-de-nuevo').addEventListener('click', () => {
+    try { localStorage.removeItem('ts_completado'); } catch (e) {}
+    window.location.reload();
+  });
+  chequearYaCompleto();
+
   /* ─── Tracking: captura GCLID + UTMs para atribución de Google Ads ─── */
   /* El pago se confirma fuera de la web (WhatsApp + MercadoPago), así que la
      conversión real se sube offline a Google Ads usando el gclid guardado
@@ -1944,6 +1982,7 @@
     // Show OK state
     document.getElementById('paso-cal').style.display = 'none';
     document.getElementById('paso-ok').style.display  = 'block';
+    marcarCompletado();
 
     setTimeout(() => { window.location.href = MP_LINK; }, 1200);
   }
