@@ -998,10 +998,10 @@
           </div>
         </div>
         <div class="fgroup">
-          <label for="telefono">WhatsApp</label>
+          <label for="telefono">Número de celular</label>
           <input type="tel" id="telefono" placeholder="11 1234-5678" autocomplete="tel"/>
           <div class="fnota">Te contactamos acá para coordinar el pago.</div>
-          <div class="ferror" id="err-telefono">Ingresá tu número de WhatsApp.</div>
+          <div class="ferror" id="err-telefono">Ingresá tu número de celular.</div>
         </div>
         <div class="fgroup">
           <label for="email">Email</label>
@@ -1846,7 +1846,7 @@
     const email    = document.getElementById('email').value.trim();
     let ok = true;
     if (!nombre)                       { showErr('nombre',   'Ingresá tu nombre.');           ok = false; }
-    if (!telefono)                     { showErr('telefono', 'Ingresá tu número de WhatsApp.'); ok = false; }
+    if (!telefono)                     { showErr('telefono', 'Ingresá tu número de celular.'); ok = false; }
     if (!email || !/\S+@\S+\.\S+/.test(email)) { showErr('email', 'Ingresá un email válido.');  ok = false; }
     if (!ok) { shakeCard(); return; }
 
