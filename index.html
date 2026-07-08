@@ -1634,6 +1634,13 @@
     if (typeof gtag === 'function') gtag('event', nombre, params || {});
   }
 
+  /* ─── Guardar avance parcial: se llama en cada "Siguiente" del funnel,
+     así si el lead abandona a mitad de camino ya tenemos lo que completó ─── */
+  function guardarPaso(estado) {
+    leadData = { ...leadData, ...preData, ...filtroData, estado, ts: new Date().toISOString() };
+    enviarAlCRM(leadData);
+  }
+
   /* ─── Validation helpers ─── */
   function showErr(fieldId, msg) {
     const errEl = document.getElementById('err-' + fieldId);
@@ -1682,10 +1689,12 @@
     document.getElementById('next-' + step).disabled = !val;
   }
 
+  const FILTRO_LABELS = { 1: 'progreso_clave_fiscal', 2: 'progreso_actividad', 3: 'progreso_rubro', 4: 'progreso_provincia', 5: 'progreso_local' };
   function filtroSiguiente(step) {
     document.getElementById('filtro-' + step).style.display = 'none';
     document.getElementById('filtro-' + (step + 1)).style.display = 'block';
     updateFiltroProgress(step + 1);
+    guardarPaso(FILTRO_LABELS[step] || ('progreso_filtro_' + step));
   }
 
   function filtroAnterior(step) {
@@ -1766,16 +1775,19 @@
     document.getElementById('pre-next-3').disabled = !raw;
   }
 
+  const PRE_LABELS = { 1: 'progreso_cuit', 2: 'progreso_dni' };
   function preSiguiente(step) {
     if (step === 2 && preData.dni_argentino === 'no') {
       document.getElementById('pre-2').style.display = 'none';
       document.getElementById('pre-2b').style.display = 'block';
       updatePreProgress(2.5);
+      guardarPaso('progreso_dni');
       return;
     }
     document.getElementById('pre-' + step).style.display = 'none';
     document.getElementById('pre-' + (step + 1)).style.display = 'block';
     updatePreProgress(step + 1);
+    guardarPaso(PRE_LABELS[step] || ('progreso_pre_' + step));
   }
 
   function preSiguienteExtranjero() {
@@ -1783,6 +1795,7 @@
     document.getElementById('pre-2b').style.display = 'none';
     document.getElementById('pre-3').style.display = 'block';
     updatePreProgress(3);
+    guardarPaso('progreso_residencia');
   }
 
   function preAnteriorExtranjero() {
