@@ -1604,7 +1604,35 @@
 <script>
   const CRM_WEBHOOK = 'https://TU_WEBHOOK_AQUI';
   const MP_LINK     = 'https://mpago.la/TU_LINK_DE_PAGO'; // ← reemplazá con tu link de MercadoPago
+  const VARIANTE    = 'A';
   let leadData = {};
+
+  /* ─── Tracking: captura GCLID + UTMs para atribución de Google Ads ─── */
+  /* El pago se confirma fuera de la web (WhatsApp + MercadoPago), así que la
+     conversión real se sube offline a Google Ads usando el gclid guardado
+     en el CRM junto con el lead. */
+  const TRACK_KEYS = ['gclid','gbraid','wbraid','utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+  (function capturarTracking() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const stored = JSON.parse(localStorage.getItem('ts_tracking') || '{}');
+      let hayNuevos = false;
+      TRACK_KEYS.forEach(k => {
+        const v = params.get(k);
+        if (v) { stored[k] = v; hayNuevos = true; }
+      });
+      if (hayNuevos) {
+        stored.captured_at = new Date().toISOString();
+        localStorage.setItem('ts_tracking', JSON.stringify(stored));
+      }
+    } catch (e) {}
+  })();
+  function getTracking() {
+    try { return JSON.parse(localStorage.getItem('ts_tracking') || '{}'); } catch (e) { return {}; }
+  }
+  function trackEvent(nombre, params) {
+    if (typeof gtag === 'function') gtag('event', nombre, params || {});
+  }
 
   /* ─── Validation helpers ─── */
   function showErr(fieldId, msg) {
@@ -1782,6 +1810,7 @@
     document.getElementById('pre-no-apto').style.display = 'block';
     leadData = { ...leadData, ...preData, estado: 'no_apto', ts: new Date().toISOString() };
     enviarAlCRM(leadData);
+    trackEvent('lead_no_apto', { variante: VARIANTE });
     document.getElementById('form-title').textContent = 'No calificás por este medio';
     document.getElementById('form-sub').textContent   = '';
   }
@@ -1800,6 +1829,7 @@
     document.getElementById('pre-apto').style.display = 'block';
     leadData = { ...leadData, ...preData, estado: 'apto', ts: new Date().toISOString() };
     enviarAlCRM(leadData);
+    trackEvent('lead_apto', { variante: VARIANTE });
   }
 
   function mostrarWizardDatos() {
@@ -1826,6 +1856,7 @@
       telefono, email, estado: 'paso_1', ts: new Date().toISOString()
     };
     enviarAlCRM(leadData);
+    trackEvent('lead_paso1', { variante: VARIANTE });
 
     resetFiltro();
     resetPreFiltro();
@@ -1869,6 +1900,7 @@
 
     leadData = { ...leadData, ...filtroData, estado: 'calificado', ts: new Date().toISOString() };
     enviarAlCRM(leadData);
+    trackEvent('wizard_completo', { variante: VARIANTE });
 
     document.getElementById('paso-2').style.display   = 'none';
     document.getElementById('paso-cal').style.display = 'block';
@@ -1886,19 +1918,10 @@
     leadData = { ...leadData, ...filtroData, estado: 'completo', ts: new Date().toISOString() };
     enviarAlCRM(leadData);
 
-    // Google Ads + GA4 conversion
-    // Reemplazá AW-XXXXXXXXXX/XXXXXXXXXXXX con tu ID y etiqueta de conversión
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'conversion', {
-        'send_to': 'AW-XXXXXXXXXX/XXXXXXXXXXXX',
-        'value': 60000,
-        'currency': 'ARS'
-      });
-      gtag('event', 'generate_lead', {
-        'event_category': 'formulario',
-        'event_label': 'alta_monotributo'
-      });
-    }
+    // GA4: hito final del funnel en la web. La conversión de PAGO se sube
+    // offline a Google Ads desde el CRM/n8n usando el gclid del lead.
+    trackEvent('generate_lead', { variante: VARIANTE });
+    trackEvent('form_completo', { variante: VARIANTE });
 
     // Show OK state
     document.getElementById('paso-cal').style.display = 'none';
@@ -1910,10 +1933,18 @@
   /* ─── CRM ─── */
   function enviarAlCRM(data) {
     if (!CRM_WEBHOOK || CRM_WEBHOOK.includes('TU_WEBHOOK')) return;
+    const payload = {
+      ...data,
+      ...getTracking(),
+      variante: VARIANTE,
+      landing_url: window.location.origin + window.location.pathname,
+      referrer: document.referrer || null,
+      user_agent: navigator.userAgent
+    };
     fetch(CRM_WEBHOOK, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      body: JSON.stringify(payload)
     }).catch(() => {});
   }
 
