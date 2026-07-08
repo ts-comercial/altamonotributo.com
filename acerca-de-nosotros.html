@@ -387,9 +387,16 @@
 <script>
   (function () {
     var ref = document.referrer || '';
-    var home = ref.indexOf('landing_alta_monotributo_b.html') !== -1
-      ? 'landing_alta_monotributo_b.html'
-      : 'index.html';
+    var home;
+    if (window.location.protocol === 'file:') {
+      // Preview local: volver al archivo correspondiente
+      home = ref.indexOf('landing_alta_monotributo_b.html') !== -1
+        ? 'landing_alta_monotributo_b.html'
+        : 'landing_alta_monotributo.html';
+    } else {
+      // Producción: URL limpia, sin index.html
+      home = '/';
+    }
     document.querySelectorAll('.js-home').forEach(function (el) { el.setAttribute('href', home); });
     document.querySelectorAll('.js-cta').forEach(function (el) { el.setAttribute('href', home + '#formulario'); });
     document.querySelectorAll('.js-home').forEach(function (el) {
