@@ -1001,6 +1001,11 @@
 
       <!-- PASO 1 -->
       <div id="paso-1">
+        <!-- Campo trampa: invisible para personas, tentador para bots que autocompletan formularios -->
+        <div style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+          <label for="website">No completar</label>
+          <input type="text" id="website" name="website" tabindex="-1" autocomplete="off"/>
+        </div>
         <div class="frow">
           <div class="fgroup">
             <label for="nombre">Nombre</label>
@@ -1620,7 +1625,7 @@
 
 
 <script>
-  const CRM_WEBHOOK = 'https://n8n.srv1405460.hstgr.cloud/webhook/lead-altamonotributo';
+  const CRM_WEBHOOK = 'https://crm-supabase-six.vercel.app/api/lead-intake';
   const MP_LINK     = 'https://mpago.la/1BGHetV';
   const VARIANTE    = 'A';
   let leadData = {};
@@ -1909,7 +1914,8 @@
     // Guardamos el lead YA en el CRM, aunque no termine el resto del formulario
     leadData = {
       nombre, apellido: document.getElementById('apellido').value.trim(),
-      telefono, email, estado: 'paso_1', ts: new Date().toISOString()
+      telefono, email, estado: 'paso_1', ts: new Date().toISOString(),
+      website: document.getElementById('website').value
     };
     enviarAlCRM(leadData);
     trackEvent('lead_paso1', { variante: VARIANTE });
