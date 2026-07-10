@@ -306,6 +306,7 @@
 
     /* ─── FORM CARD ─── */
     .form-card {
+      scroll-margin-top: 84px;
       background: var(--blanco);
       border-radius: 20px;
       padding: 30px;
@@ -978,7 +979,7 @@
 
 <!-- HERO -->
 <div class="hero-bg">
-  <div class="hero" id="formulario">
+  <div class="hero">
 
     <!-- Izquierda -->
     <div class="hero-left">
@@ -1041,7 +1042,7 @@
     </div>
 
     <!-- Formulario -->
-    <div class="form-card">
+    <div class="form-card" id="formulario">
 
       <!-- YA COMPLETASTE: se muestra si localStorage indica que este navegador ya terminó el formulario -->
       <div id="ya-completo" class="ok-state" style="display:none;">
@@ -1086,17 +1087,17 @@
         <div class="frow">
           <div class="fgroup">
             <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" placeholder="Juan" autocomplete="given-name"/>
+            <input type="text" id="nombre" placeholder="Juan" autocomplete="given-name" oninput="soloLetras(this)"/>
             <div class="ferror" id="err-nombre">Ingresá tu nombre.</div>
           </div>
           <div class="fgroup">
             <label for="apellido">Apellido</label>
-            <input type="text" id="apellido" placeholder="García" autocomplete="family-name"/>
+            <input type="text" id="apellido" placeholder="García" autocomplete="family-name" oninput="soloLetras(this)"/>
           </div>
         </div>
         <div class="fgroup">
           <label for="telefono">Número de celular</label>
-          <input type="tel" id="telefono" placeholder="11 1234-5678" autocomplete="tel"/>
+          <input type="tel" id="telefono" placeholder="11 1234-5678" autocomplete="tel" inputmode="numeric" oninput="soloNumeros(this)"/>
           <div class="fnota">Te contactamos acá para coordinar el pago.</div>
           <div class="ferror" id="err-telefono">Ingresá tu número de celular.</div>
         </div>
@@ -1919,6 +1920,34 @@
     el.value = el.value.replace(/\D/g, '');
   }
 
+  function soloLetras(el) {
+    el.value = el.value.replace(/[0-9]/g, '');
+  }
+
+  /* ─── Email: detección de typos en dominios comunes ─── */
+  const DOMINIOS_COMUNES = ['gmail.com','hotmail.com','outlook.com','yahoo.com','yahoo.com.ar','icloud.com','live.com','hotmail.com.ar','outlook.com.ar'];
+  function distanciaEdicion(a, b) {
+    const m = [];
+    for (let i = 0; i <= b.length; i++) m[i] = [i];
+    for (let j = 0; j <= a.length; j++) m[0][j] = j;
+    for (let i = 1; i <= b.length; i++)
+      for (let j = 1; j <= a.length; j++)
+        m[i][j] = b[i-1] === a[j-1] ? m[i-1][j-1] : Math.min(m[i-1][j-1], m[i][j-1], m[i-1][j]) + 1;
+    return m[b.length][a.length];
+  }
+  function sugerirEmail(email) {
+    const partes = email.split('@');
+    if (partes.length !== 2) return null;
+    const dominio = partes[1].toLowerCase();
+    if (DOMINIOS_COMUNES.includes(dominio)) return null;
+    for (const d of DOMINIOS_COMUNES) {
+      const dist = distanciaEdicion(dominio, d);
+      if (dist > 0 && dist <= 2) return partes[0] + '@' + d;
+    }
+    return null;
+  }
+  let emailDudoso = null;
+
   function checkMonto() {
     const input = document.getElementById('monto_estimado');
     const raw = input.value.replace(/\D/g, '');
@@ -2007,12 +2036,35 @@
   /* ─── Step 1 → Filtro rápido ─── */
   function irPaso2() {
     const nombre   = document.getElementById('nombre').value.trim();
-    const telefono = document.getElementById('telefono').value.trim();
+    const telefono = document.getElementById('telefono').value.replace(/\D/g, '');
     const email    = document.getElementById('email').value.trim();
     let ok = true;
-    if (!nombre)                       { showErr('nombre',   'Ingresá tu nombre.');           ok = false; }
-    if (!telefono)                     { showErr('telefono', 'Ingresá tu número de celular.'); ok = false; }
-    if (!email || !/\S+@\S+\.\S+/.test(email)) { showErr('email', 'Ingresá un email válido.');  ok = false; }
+    if (!nombre || nombre.length < 2) { showErr('nombre', 'Ingresá tu nombre.'); ok = false; }
+    if (!telefono)                    { showErr('telefono', 'Ingresá tu número de celular.'); ok = false; }
+    else if (telefono.length < 8)     { showErr('telefono', 'Ese número parece incompleto. Ingresalo con código de área (ej: 11 1234-5678).'); ok = false; }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email)) {
+      showErr('email', 'Ingresá un email válido.');
+      ok = false;
+    } else {
+      const sugerencia = sugerirEmail(email);
+      if (sugerencia) {
+        const errEl = document.getElementById('err-email');
+        errEl.innerHTML = '¿Quisiste decir <u style="cursor:pointer;font-weight:600;">' + sugerencia + '</u>? Tocá la sugerencia para corregirlo, o volvé a tocar el botón si tu email es correcto.';
+        errEl.classList.add('show');
+        document.getElementById('email').classList.add('has-error');
+        errEl.onclick = function () {
+          document.getElementById('email').value = sugerencia;
+          clearErr('email');
+          errEl.onclick = null;
+        };
+        // Solo frena la primera vez: si insiste con el mismo email, lo dejamos pasar.
+        if (emailDudoso !== email) {
+          emailDudoso = email;
+          shakeCard();
+          return;
+        }
+      }
+    }
     if (!ok) { shakeCard(); return; }
 
     // Guardamos el lead YA en el CRM, aunque no termine el resto del formulario
