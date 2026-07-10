@@ -28,7 +28,8 @@
       --negro:      #12151D;
       --negro2:     #1C2029;
       --azul:       #10B981;
-      --azul-dark:  #0D9488;
+      --azul-dark:  #047857;
+      --azul-btn:   #059669;
       --azul-light: #ECFDF5;
       --texto:      #111827;
       --sub:        #6B7280;
@@ -83,7 +84,7 @@
     .nav-links a { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.48); text-decoration: none; transition: color .15s; }
     .nav-links a:hover { color: rgba(255,255,255,0.9); }
     .btn-nav {
-      background: var(--azul); color: #fff !important;
+      background: var(--azul-btn); color: #fff !important;
       font-size: 13px; font-weight: 600;
       padding: 7px 16px; border-radius: 8px;
       transition: background .15s, transform .1s;
@@ -215,23 +216,52 @@
     .contact-box .contact-links a:hover { text-decoration: underline; }
 
     /* ─── CTA FINAL ─── */
-    .cta-section { background: linear-gradient(135deg, #10B981 0%, #0D9488 100%); padding: 88px 40px; text-align: center; }
+    .cta-section {
+      background: var(--negro);
+      padding: 88px 40px; text-align: center;
+      position: relative; overflow: hidden;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+      background-size: 72px 72px;
+      pointer-events: none;
+    }
+    .cta-section::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 700px; height: 340px;
+      background: radial-gradient(ellipse, rgba(16,185,129,0.2) 0%, transparent 70%);
+      pointer-events: none;
+      animation: glowDriftCenter 15s ease-in-out infinite;
+    }
+    @keyframes glowDriftCenter {
+      0%   { transform: translate(-50%, -50%) scale(1); }
+      50%  { transform: translate(-58%, -42%) scale(1.15); }
+      100% { transform: translate(-50%, -50%) scale(1); }
+    }
+    .cta-section > * { position: relative; z-index: 1; }
     .cta-section h2 { font-size: clamp(26px, 4vw, 40px); font-weight: 800; color: #fff; letter-spacing: -1.3px; line-height: 1.1; margin-bottom: 14px; }
-    .cta-section p { color: rgba(255,255,255,0.44); font-size: 15px; margin-bottom: 30px; }
+    .cta-section p { color: rgba(255,255,255,0.6); font-size: 15px; margin-bottom: 30px; }
     .btn-cta-white {
       display: inline-flex; align-items: center; gap: 8px;
-      background: #fff; color: var(--negro);
+      background: var(--azul-btn); color: #fff;
       font-size: 14px; font-weight: 700;
       padding: 14px 28px; border-radius: 10px;
-      text-decoration: none; transition: opacity .15s, transform .12s;
+      text-decoration: none; transition: background .15s, transform .12s;
     }
-    .btn-cta-white:hover { opacity: 0.9; transform: translateY(-2px); }
+    .btn-cta-white:hover { background: var(--azul-dark); transform: translateY(-2px); }
 
     /* ─── FOOTER ─── */
-    .aviso { background: var(--fondo); border-top: 1px solid var(--borde); padding: 18px 40px; text-align: center; font-size: 11px; color: var(--gris); line-height: 1.9; }
-    footer { padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: var(--gris); max-width: 1160px; margin: 0 auto; }
-    footer a { color: var(--gris); text-decoration: none; }
-    footer a:hover { color: var(--sub); }
+    .aviso { background: var(--fondo); border-top: 1px solid var(--borde); padding: 18px 40px; text-align: center; font-size: 11px; color: var(--sub); line-height: 1.9; }
+    footer { padding: 22px 40px; display: flex; align-items: center; justify-content: space-between; font-size: 12.5px; color: var(--sub); max-width: 1160px; margin: 0 auto; flex-wrap: wrap; gap: 10px; }
+    footer a { color: var(--sub); text-decoration: none; transition: color .15s; }
+    footer a:hover { color: var(--texto); }
 
     /* ─── WHATSAPP FLOAT ─── */
     .wa-float {
@@ -371,9 +401,12 @@
 </div>
 
 <footer>
-  <div>© 2026 AltaMonotributo</div>
-  <div style="display:flex;gap:16px;">
+  <div>© 2026 AltaMonotributo · un servicio de <a href="https://tributosimple.com" target="_blank" rel="noopener" style="font-weight:600;">Tributo Simple ®</a></div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap;">
     <a href="javascript:void(0)" class="js-home">Volver al inicio</a>
+    <a href="https://tributosimple.com/terminos-y-condiciones/" target="_blank" rel="noopener">Términos y condiciones</a>
+    <a href="https://tributosimple.com/terminos-y-condiciones/" target="_blank" rel="noopener">Política de privacidad</a>
+    <a href="https://www.instagram.com/tributosimple/" target="_blank" rel="noopener">Instagram</a>
   </div>
 </footer>
 

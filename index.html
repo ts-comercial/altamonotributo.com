@@ -106,8 +106,9 @@
     :root {
       --negro:      #12151D;
       --negro2:     #1C2029;
-      --azul:       #10B981;
-      --azul-dark:  #0D9488;
+      --azul:       #10B981;   /* acento de marca (íconos, badges, selecciones) */
+      --azul-dark:  #047857;   /* hover de botones */
+      --azul-btn:   #059669;   /* botones primarios */
       --azul-light: #ECFDF5;
       --texto:      #111827;
       --sub:        #6B7280;
@@ -167,7 +168,7 @@
     }
     .nav-links a:hover { color: rgba(255,255,255,0.9); }
     .btn-nav {
-      background: var(--azul); color: #fff !important;
+      background: var(--azul-btn); color: #fff !important;
       font-size: 13px; font-weight: 600;
       padding: 7px 16px; border-radius: 8px;
       transition: background .15s, transform .1s;
@@ -242,7 +243,7 @@
     }
     .eyebrow-text {
       font-size: 12px; font-weight: 500;
-      color: rgba(255,255,255,0.48); letter-spacing: 0.1px;
+      color: rgba(255,255,255,0.62); letter-spacing: 0.1px;
     }
 
     .hero h1 {
@@ -260,7 +261,7 @@
 
     .hero-desc {
       font-size: 15.5px;
-      color: rgba(255,255,255,0.46);
+      color: rgba(255,255,255,0.62);
       line-height: 1.8;
       max-width: 400px;
       margin-bottom: 36px;
@@ -272,7 +273,7 @@
     }
     .punto {
       display: flex; align-items: center; gap: 12px;
-      font-size: 13.5px; color: rgba(255,255,255,0.7);
+      font-size: 13.5px; color: rgba(255,255,255,0.85);
       font-weight: 500;
     }
     .punto-check {
@@ -284,10 +285,10 @@
     .punto-check svg { width: 10px; height: 10px; }
 
     .hero-aviso {
-      font-size: 11.5px; color: rgba(255,255,255,0.35);
+      font-size: 11.5px; color: rgba(255,255,255,0.5);
       line-height: 1.7; margin-top: 24px;
     }
-    .hero-aviso strong { color: rgba(255,255,255,0.55); }
+    .hero-aviso strong { color: rgba(255,255,255,0.72); }
 
     .hero-nums {
       display: flex; gap: 36px;
@@ -299,7 +300,7 @@
       color: #fff; letter-spacing: -1px; line-height: 1;
     }
     .num-label {
-      font-size: 11.5px; color: rgba(255,255,255,0.3);
+      font-size: 11.5px; color: rgba(255,255,255,0.55);
       margin-top: 4px; font-weight: 400;
     }
 
@@ -409,14 +410,14 @@
     /* ─── SUBMIT BUTTON ─── */
     .btn-submit {
       width: 100%; border: none; cursor: pointer;
-      background: var(--negro); color: #fff;
+      background: var(--azul-btn); color: #fff;
       border-radius: 10px; padding: 13px 16px;
       font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif;
       margin-top: 8px;
       transition: background .15s, transform .1s;
       display: flex; align-items: center; justify-content: center; gap: 8px;
     }
-    .btn-submit:hover:not(:disabled) { background: #1c1c20; transform: translateY(-1px); }
+    .btn-submit:hover:not(:disabled) { background: var(--azul-dark); transform: translateY(-1px); }
     .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
     .btn-spinner {
       width: 15px; height: 15px;
@@ -576,7 +577,7 @@
       -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
     }
     .stat-label {
-      font-size: 12.5px; color: rgba(255,255,255,0.42);
+      font-size: 12.5px; color: rgba(255,255,255,0.6);
       margin-top: 8px; font-weight: 500;
     }
     @media (max-width: 600px) {
@@ -603,7 +604,7 @@
     .sec-dark .wrap { position: relative; z-index: 1; }
     .sec-label.on-dark { background: rgba(16,185,129,0.15); color: #6EE7B7; }
     .sec-h.on-dark { color: #fff; }
-    .sec-sub.on-dark { color: rgba(255,255,255,0.5); }
+    .sec-sub.on-dark { color: rgba(255,255,255,0.65); }
     .pasos {
       margin-top: 56px;
       display: grid; grid-template-columns: repeat(4, 1fr);
@@ -639,12 +640,60 @@
       margin-bottom: 20px;
     }
     .paso h3 { position: relative; z-index: 1; font-size: 14px; font-weight: 700; margin-bottom: 7px; color: #fff; }
-    .paso p  { position: relative; z-index: 1; font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.65; }
+    .paso p  { position: relative; z-index: 1; font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.65; }
 
     /* ─── QUÉ INCLUYE ─── */
+    .incluye-grid {
+      margin-top: 48px;
+      display: grid; grid-template-columns: 1fr 340px;
+      gap: 28px; align-items: start;
+    }
     .incluye-list {
-      margin-top: 48px; border: 1px solid var(--borde);
+      border: 1px solid var(--borde);
       border-radius: 16px; overflow: hidden;
+    }
+
+    /* Mock ilustrativo de la constancia (CSS puro, sin imagen) */
+    .constancia-wrap { position: sticky; top: calc(var(--nav-h) + 24px); }
+    .constancia-doc {
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: 12px;
+      padding: 24px 22px 20px;
+      box-shadow: 0 12px 32px rgba(17,24,39,0.08);
+      position: relative;
+      transform: rotate(1.2deg);
+    }
+    .cd-head { margin-bottom: 18px; }
+    .cd-title { font-size: 13px; font-weight: 800; letter-spacing: -0.2px; }
+    .cd-sub { font-size: 10.5px; color: var(--gris); margin-top: 2px; }
+    .cd-line {
+      height: 8px; border-radius: 4px;
+      background: var(--fondo);
+      border: 1px solid var(--borde);
+      margin-bottom: 9px;
+    }
+    .cd-divider { height: 1px; background: var(--borde); margin: 14px 0; }
+    .cd-qr { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
+    .cd-qr-box {
+      width: 44px; height: 44px; border-radius: 6px; flex-shrink: 0;
+      background:
+        repeating-linear-gradient(0deg, var(--texto) 0 3px, transparent 3px 6px),
+        repeating-linear-gradient(90deg, var(--texto) 0 3px, var(--fondo) 3px 6px);
+      opacity: 0.75;
+    }
+    .cd-stamp {
+      position: absolute; top: 16px; right: 16px;
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--azul-light); color: var(--azul-dark);
+      border: 1px solid #A7F3D0;
+      font-size: 11px; font-weight: 700;
+      padding: 5px 10px; border-radius: 100px;
+      transform: rotate(-4deg);
+    }
+    .constancia-caption {
+      text-align: center; font-size: 12px; color: var(--sub);
+      margin-top: 16px;
     }
     .incluye-row {
       display: flex; align-items: flex-start; gap: 20px;
@@ -656,8 +705,23 @@
 
     /* ─── QUÉ ES EL MONOTRIBUTO (tarjetas) ─── */
     .mt-cards { margin-top: 32px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-    .mt-card { border: 1px solid var(--borde); border-radius: 14px; padding: 22px; }
-    .mt-card svg { color: var(--texto); margin-bottom: 16px; }
+    .mt-card {
+      border: 1px solid var(--borde); border-radius: 14px; padding: 22px;
+      background: var(--blanco);
+      transition: border-color .2s, box-shadow .2s, transform .2s;
+    }
+    .mt-card:hover {
+      border-color: #A7F3D0;
+      box-shadow: 0 8px 24px rgba(16,185,129,0.09);
+      transform: translateY(-2px);
+    }
+    .mt-card svg {
+      color: var(--azul-dark);
+      background: var(--azul-light);
+      width: 38px; height: 38px;
+      padding: 9px; border-radius: 10px;
+      margin-bottom: 16px;
+    }
     .mt-card h3 { font-size: 14.5px; font-weight: 700; margin-bottom: 6px; }
     .mt-card p { font-size: 13px; color: var(--sub); line-height: 1.6; }
     @media (max-width: 780px) { .mt-cards { grid-template-columns: 1fr 1fr; } }
@@ -707,10 +771,10 @@
     /* ─── FAQ (custom accordion) ─── */
     .faq-list {
       margin-top: 44px; max-width: 680px;
-      border: 1px solid rgba(16,185,129,0.35);
+      border: 1px solid var(--borde);
       border-radius: 16px;
       padding: 6px 24px;
-      background: linear-gradient(180deg, rgba(16,185,129,0.05), transparent 40%);
+      background: var(--blanco);
     }
     .faq-item { border-bottom: 1px solid var(--borde); }
     .faq-item:last-child { border-bottom: none; }
@@ -742,25 +806,35 @@
       overflow: hidden; max-height: 0;
       transition: max-height .38s cubic-bezier(0.4,0,0.2,1);
     }
-    .faq-item.open .faq-content { max-height: 320px; }
+    .faq-item.open .faq-content { max-height: 460px; }
     .faq-body {
       padding: 0 0 20px;
       font-size: 13.5px; color: var(--sub); line-height: 1.8;
     }
 
-    /* ─── CTA FINAL ─── */
+    /* ─── CTA FINAL (oscura, mismo lenguaje que el hero) ─── */
     .cta-section {
-      background: linear-gradient(135deg, #10B981 0%, #0D9488 100%);
+      background: var(--negro);
       padding: 100px 40px;
       text-align: center;
       position: relative; overflow: hidden;
+      border-top: 1px solid rgba(255,255,255,0.07);
     }
     .cta-section::before {
       content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+      background-size: 72px 72px;
+      pointer-events: none;
+    }
+    .cta-section::after {
+      content: '';
       position: absolute;
       top: 50%; left: 50%;
-      width: 700px; height: 300px;
-      background: radial-gradient(ellipse, rgba(255,255,255,0.18) 0%, transparent 70%);
+      width: 700px; height: 340px;
+      background: radial-gradient(ellipse, rgba(16,185,129,0.2) 0%, transparent 70%);
       pointer-events: none;
       animation: glowDriftCenter 15s ease-in-out infinite;
     }
@@ -775,25 +849,25 @@
       letter-spacing: -1.5px; line-height: 1.08;
       margin-bottom: 14px; position: relative; z-index: 1;
     }
-    .cta-section h2 em { font-style: normal; color: rgba(255,255,255,0.28); }
+    .cta-section h2 em { font-style: normal; color: rgba(255,255,255,0.4); }
     .cta-section p {
-      color: rgba(255,255,255,0.44); font-size: 15px;
+      color: rgba(255,255,255,0.6); font-size: 15px;
       margin-bottom: 34px; position: relative; z-index: 1;
     }
     .btn-cta-white {
       display: inline-flex; align-items: center; gap: 8px;
-      background: #fff; color: var(--negro);
+      background: var(--azul-btn); color: #fff;
       font-size: 14px; font-weight: 700;
       padding: 14px 28px; border-radius: 10px;
       text-decoration: none;
-      transition: opacity .15s, transform .12s;
+      transition: background .15s, transform .12s;
       letter-spacing: -0.1px;
       position: relative; z-index: 1;
     }
-    .btn-cta-white:hover { opacity: 0.9; transform: translateY(-2px); }
+    .btn-cta-white:hover { background: var(--azul-dark); transform: translateY(-2px); }
     .btn-inline-cta {
       display: inline-flex; align-items: center; gap: 8px;
-      background: var(--azul); color: #fff;
+      background: var(--azul-btn); color: #fff;
       font-size: 14px; font-weight: 600;
       padding: 12px 22px; border-radius: 10px;
       text-decoration: none;
@@ -805,16 +879,17 @@
     .aviso {
       background: var(--fondo); border-top: 1px solid var(--borde);
       padding: 18px 40px; text-align: center;
-      font-size: 11px; color: var(--gris); line-height: 1.9;
+      font-size: 11px; color: var(--sub); line-height: 1.9;
     }
     footer {
-      padding: 18px 40px;
+      padding: 22px 40px;
       display: flex; align-items: center; justify-content: space-between;
-      font-size: 12px; color: var(--gris);
+      font-size: 12.5px; color: var(--sub);
       max-width: 1160px; margin: 0 auto;
+      flex-wrap: wrap; gap: 10px;
     }
-    footer a { color: var(--gris); text-decoration: none; }
-    footer a:hover { color: var(--sub); }
+    footer a { color: var(--sub); text-decoration: none; transition: color .15s; }
+    footer a:hover { color: var(--texto); }
 
     /* ─── WHATSAPP FLOAT ─── */
     .wa-float {
@@ -846,7 +921,7 @@
     .mobile-sticky.visible { transform: translateY(0); }
     .btn-sticky {
       display: block; width: 100%;
-      background: var(--azul); color: #fff;
+      background: var(--azul-btn); color: #fff;
       font-size: 14px; font-weight: 600;
       padding: 13px; border-radius: 10px;
       text-align: center; text-decoration: none;
@@ -868,6 +943,8 @@
       .pasos::before { display: none; }
       .paso { padding: 0; margin-bottom: 36px; }
       .test-grid { grid-template-columns: 1fr 1fr; }
+      .incluye-grid { grid-template-columns: 1fr; }
+      .constancia-wrap { position: static; max-width: 340px; margin: 0 auto; }
       .wrap { padding: 0 24px; }
       section { padding: 68px 0; }
       nav { padding: 0 24px; }
@@ -1030,7 +1107,7 @@
         </div>
         <button class="btn-submit" id="btn-p1" onclick="irPaso2()">
           <div class="btn-spinner"></div>
-          <span class="btn-label">Continuar</span>
+          <span class="btn-label">Empezar mi alta</span>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <div class="form-pie">
@@ -1121,7 +1198,7 @@
               <path d="M20 6L9 17l-5-5" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
-          <h3>¡Sos apto para el alta express!</h3>
+          <h3>¡Muy bien! Podés darte de alta.</h3>
           <p>Ahora sí, últimos datos para armar tu trámite.</p>
           <button type="button" class="btn-submit" style="margin-top:16px;" onclick="mostrarWizardDatos()">Continuar</button>
         </div>
@@ -1236,7 +1313,7 @@
             <path d="M20 6L9 17l-5-5" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <h3>¡Listo! Calificás para el alta express.</h3>
+        <h3>¡Listo! Tu alta puede iniciarse hoy.</h3>
         <p>Con tus datos ya tenemos todo lo que necesitamos. Confirmá para coordinar el pago y arrancar el trámite.</p>
         <button class="btn-submit" id="btn-p2" style="margin-top:16px;" onclick="enviarFormulario()">
           <div class="btn-spinner"></div>
@@ -1359,34 +1436,63 @@
     <div class="sec-label reveal">Qué incluye</div>
     <h2 class="sec-h reveal">Un pago, todo resuelto.</h2>
     <p class="sec-sub reveal">Sin cobros extras después. Lo que acordamos es lo que pasa.</p>
-    <div class="incluye-list reveal">
-      <div class="incluye-row">
-        <div class="inc-n">01</div>
-        <div class="inc-body">
-          <h3>Alta ante ARCA</h3>
-          <p>Inscripción completa en el Régimen Simplificado con la categoría correcta para tu situación.</p>
+    <div class="incluye-grid reveal">
+      <div class="incluye-list">
+        <div class="incluye-row">
+          <div class="inc-n">01</div>
+          <div class="inc-body">
+            <h3>Alta ante ARCA</h3>
+            <p>Inscripción completa en el Régimen Simplificado con la categoría correcta para tu situación.</p>
+          </div>
+        </div>
+        <div class="incluye-row">
+          <div class="inc-n">02</div>
+          <div class="inc-body">
+            <h3>Constancia oficial</h3>
+            <p>El comprobante de inscripción en PDF, con código de validación, listo para usar.</p>
+          </div>
+        </div>
+        <div class="incluye-row">
+          <div class="inc-n">03</div>
+          <div class="inc-body">
+            <h3>Categoría optimizada</h3>
+            <p>Analizamos tu actividad e ingresos para que no pagues de más ni quedes mal categorizado.</p>
+          </div>
+        </div>
+        <div class="incluye-row">
+          <div class="inc-n">04</div>
+          <div class="inc-body">
+            <h3>Soporte post-alta</h3>
+            <p>Respondemos tus dudas por WhatsApp después del trámite, sin costo adicional.</p>
+          </div>
         </div>
       </div>
-      <div class="incluye-row">
-        <div class="inc-n">02</div>
-        <div class="inc-body">
-          <h3>Constancia oficial</h3>
-          <p>El comprobante de inscripción en PDF, con código de validación, listo para usar.</p>
+      <div class="constancia-wrap" aria-hidden="true">
+        <div class="constancia-doc">
+          <div class="cd-head">
+            <div class="cd-title">Constancia de Inscripción</div>
+            <div class="cd-sub">Régimen Simplificado · Monotributo</div>
+          </div>
+          <div class="cd-line" style="width:82%;"></div>
+          <div class="cd-line" style="width:64%;"></div>
+          <div class="cd-line" style="width:74%;"></div>
+          <div class="cd-line" style="width:52%;"></div>
+          <div class="cd-divider"></div>
+          <div class="cd-line" style="width:68%;"></div>
+          <div class="cd-line" style="width:44%;"></div>
+          <div class="cd-qr">
+            <div class="cd-qr-box"></div>
+            <div>
+              <div class="cd-line" style="width:90px;margin:0 0 6px;"></div>
+              <div class="cd-line" style="width:60px;margin:0;"></div>
+            </div>
+          </div>
+          <div class="cd-stamp">
+            <svg width="12" height="12" viewBox="0 0 20 20" fill="none"><path d="M4 10.5l4 4L16 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Inscripto
+          </div>
         </div>
-      </div>
-      <div class="incluye-row">
-        <div class="inc-n">03</div>
-        <div class="inc-body">
-          <h3>Categoría optimizada</h3>
-          <p>Analizamos tu actividad e ingresos para que no pagues de más ni quedes mal categorizado.</p>
-        </div>
-      </div>
-      <div class="incluye-row">
-        <div class="inc-n">04</div>
-        <div class="inc-body">
-          <h3>Soporte post-alta</h3>
-          <p>Respondemos tus dudas por WhatsApp después del trámite, sin costo adicional.</p>
-        </div>
+        <div class="constancia-caption">Tu constancia llega en PDF, lista para facturar</div>
       </div>
     </div>
     <div class="reveal" style="margin-top:32px;">
@@ -1460,39 +1566,6 @@
         </div>
       </div>
 
-    </div>
-  </div>
-</section>
-
-
-<!-- MÁS SOBRE EL MONOTRIBUTO (SEO) -->
-<section id="mas-monotributo">
-  <div class="wrap">
-    <div class="sec-label reveal">Monotributo 101</div>
-    <h2 class="sec-h reveal">Más sobre el Monotributo</h2>
-    <p class="sec-sub reveal">Lo que tenés que saber antes de inscribirte.</p>
-    <div class="incluye-list reveal">
-      <div class="incluye-row">
-        <div class="inc-n">01</div>
-        <div class="inc-body">
-          <h3>¿Quién puede inscribirse?</h3>
-          <p>Cualquier persona mayor de 18 años con DNI argentino (o residencia precaria o permanente si sos extranjero) que realice una actividad económica por cuenta propia: venta de productos, prestación de servicios, oficios o profesión.</p>
-        </div>
-      </div>
-      <div class="incluye-row">
-        <div class="inc-n">02</div>
-        <div class="inc-body">
-          <h3>Categorías del Monotributo</h3>
-          <p>Se divide en categorías, de la A a la K, según cuánto factures por año, la superficie de tu local, el consumo eléctrico y el alquiler que pagués. Cuanto más factures, más alta la categoría y mayor la cuota mensual. Te ayudamos a elegir la correcta para no pagar de más.</p>
-        </div>
-      </div>
-      <div class="incluye-row">
-        <div class="inc-n">03</div>
-        <div class="inc-body">
-          <h3>Ventajas de estar inscripto</h3>
-          <p>Emitís factura a tu nombre, tenés obra social propia, sumás aportes jubilatorios, podés blanquear tus ingresos y evitás las multas de ARCA por trabajar sin estar inscripto.</p>
-        </div>
-      </div>
     </div>
   </div>
 </section>
@@ -1581,6 +1654,36 @@
         </div>
       </div>
 
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          ¿Quién puede inscribirse al monotributo?
+          <span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M6 2v8M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+        </button>
+        <div class="faq-content">
+          <div class="faq-body">Cualquier persona mayor de 18 años con DNI argentino (o residencia precaria o permanente si sos extranjero) que realice una actividad económica por cuenta propia: venta de productos, prestación de servicios, oficios o profesión.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          ¿Cómo funcionan las categorías?
+          <span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M6 2v8M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+        </button>
+        <div class="faq-content">
+          <div class="faq-body">El monotributo se divide en categorías, de la A a la K, según cuánto factures por año, la superficie de tu local, el consumo eléctrico y el alquiler que pagués. Cuanto más factures, más alta la categoría y mayor la cuota mensual. Nosotros analizamos tu caso para inscribirte en la correcta y que no pagues de más.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          ¿Qué gano con estar inscripto?
+          <span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M6 2v8M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+        </button>
+        <div class="faq-content">
+          <div class="faq-body">Emitís factura a tu nombre, tenés obra social propia, sumás aportes jubilatorios, podés blanquear tus ingresos y evitás las multas de ARCA por trabajar sin estar inscripto.</div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -1603,10 +1706,12 @@
 </div>
 
 <footer>
-  <div>© 2026 AltaMonotributo</div>
-  <div style="display:flex;gap:16px;">
-    <a href="#">Términos y condiciones</a>
-    <a href="#">Política de privacidad</a>
+  <div>© 2026 AltaMonotributo · un servicio de <a href="https://tributosimple.com" target="_blank" rel="noopener" style="font-weight:600;">Tributo Simple ®</a></div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap;">
+    <a href="acerca-de-nosotros.html">Nosotros</a>
+    <a href="https://tributosimple.com/terminos-y-condiciones/" target="_blank" rel="noopener">Términos y condiciones</a>
+    <a href="https://tributosimple.com/terminos-y-condiciones/" target="_blank" rel="noopener">Política de privacidad</a>
+    <a href="https://www.instagram.com/tributosimple/" target="_blank" rel="noopener">Instagram</a>
   </div>
 </footer>
 
@@ -1878,7 +1983,7 @@
   function volverDesdeNoApto() {
     document.getElementById('pre-no-apto').style.display = 'none';
     resetPreFiltro();
-    document.getElementById('form-title').textContent = '¿Calificás para el alta express?';
+    document.getElementById('form-title').textContent = 'Veamos si calificás';
     document.getElementById('form-sub').textContent   = 'Unas preguntas cortas y listo';
   }
 
@@ -1934,7 +2039,7 @@
     document.getElementById('step-line').className = 'step-line done';
     document.getElementById('step-item-1').className = 'step-item';
     document.getElementById('step-item-2').className = 'step-item active';
-    document.getElementById('form-title').textContent = '¿Calificás para el alta express?';
+    document.getElementById('form-title').textContent = 'Veamos si calificás';
     document.getElementById('form-sub').textContent   = 'Unas preguntas cortas y listo';
     document.getElementById('formulario').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
