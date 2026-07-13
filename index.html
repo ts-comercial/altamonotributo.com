@@ -4,6 +4,13 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#10B981">
+
   <!-- SEO primario -->
   <title>Alta de Monotributo Online en 24hs | AltaMonotributo</title>
   <meta name="description" content="En menos de 24hs hábiles sos monotributista y podés empezar a facturar. Completás el formulario, nosotros hacemos todo el trámite ante ARCA. 100% online."/>
@@ -161,9 +168,11 @@
       border-bottom: 1px solid rgba(255,255,255,0.05);
     }
     .logo {
+      display: flex; align-items: center; gap: 8px;
       font-size: 14px; font-weight: 700; color: #fff;
       letter-spacing: -0.3px; text-decoration: none;
     }
+    .logo img { display: block; height: 20px; width: auto; }
     .logo span { color: var(--azul); }
     .nav-links { display: flex; align-items: center; gap: 24px; }
     .nav-links a {
@@ -973,7 +982,7 @@
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Alta<span>Monotributo</span></a>
+  <a href="#" class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;"><img src="logo.png" alt="" width="40" height="20">Alta<span>Monotributo</span></a>
   <div class="nav-links">
     <a href="#como-funciona">Cómo funciona</a>
     <a href="acerca-de-nosotros.html">Nosotros</a>

@@ -4,6 +4,13 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#10B981">
+
   <!-- SEO primario -->
   <title>Acerca de Nosotros | AltaMonotributo.com</title>
   <meta name="description" content="AltaMonotributo.com es un servicio privado de asistencia para monotributistas en Argentina. Conocé quiénes somos y por qué elegirnos para tu alta de Monotributo."/>
@@ -87,7 +94,8 @@
       -webkit-backdrop-filter: blur(20px) saturate(180%);
       border-bottom: 1px solid rgba(255,255,255,0.05);
     }
-    .logo { font-size: 14px; font-weight: 700; color: #fff; letter-spacing: -0.3px; text-decoration: none; background: none; border: none; cursor: pointer; font-family: inherit; }
+    .logo { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: #fff; letter-spacing: -0.3px; text-decoration: none; background: none; border: none; cursor: pointer; font-family: inherit; }
+    .logo img { display: block; height: 20px; width: auto; }
     .logo span { color: var(--azul); }
     .nav-links { display: flex; align-items: center; gap: 24px; }
     .nav-links a { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.48); text-decoration: none; transition: color .15s; }
@@ -309,7 +317,7 @@
 
 <!-- NAV -->
 <nav>
-  <button type="button" class="logo js-home">Alta<span>Monotributo</span></button>
+  <button type="button" class="logo js-home"><img src="logo.png" alt="" width="40" height="20">Alta<span>Monotributo</span></button>
   <div class="nav-links">
     <a href="#" class="js-home">Inicio</a>
     <a href="#" class="btn-nav js-cta">Darme de alta</a>
