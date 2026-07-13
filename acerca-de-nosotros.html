@@ -393,9 +393,9 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M17.5 14.4c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.44-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.87 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.42-.07-.12-.27-.2-.57-.35z" fill="#6EE7B7"/></svg>
           WhatsApp
         </a>
-        <a href="mailto:contacto@tributosimple.com">
+        <a href="mailto:ayuda@tributosimple.com">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 6h18v12H3V6z" stroke="#6EE7B7" stroke-width="1.6"/><path d="M3 7l9 6 9-6" stroke="#6EE7B7" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          contacto@tributosimple.com
+          ayuda@tributosimple.com
         </a>
       </div>
     </div>
@@ -421,8 +421,8 @@
   <div>© 2026 AltaMonotributo · un servicio de <a href="https://tributosimple.com" target="_blank" rel="noopener" style="font-weight:600;">Tributo Simple ®</a></div>
   <div style="display:flex;gap:16px;flex-wrap:wrap;">
     <a href="javascript:void(0)" class="js-home">Volver al inicio</a>
-    <a href="https://tributosimple.com/terminos-y-condiciones/" target="_blank" rel="noopener">Términos y condiciones</a>
-    <a href="https://tributosimple.com/terminos-y-condiciones/" target="_blank" rel="noopener">Política de privacidad</a>
+    <a href="terminos-y-condiciones.html">Términos y condiciones</a>
+    <a href="politica-de-privacidad.html">Política de privacidad</a>
     <a href="https://www.instagram.com/tributosimple/" target="_blank" rel="noopener">Instagram</a>
   </div>
 </footer>
@@ -440,9 +440,7 @@
     var home;
     if (window.location.protocol === 'file:') {
       // Preview local: volver al archivo correspondiente
-      home = ref.indexOf('landing_alta_monotributo_b.html') !== -1
-        ? 'landing_alta_monotributo_b.html'
-        : 'landing_alta_monotributo.html';
+      home = 'index.html';
     } else {
       // Producción: URL limpia, sin index.html
       home = '/';

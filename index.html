@@ -318,6 +318,37 @@
       margin-top: 4px; font-weight: 400;
     }
 
+    /* ─── TARJETA DE PRECIO (compacta) ─── */
+    .precio-card {
+      background: var(--azul-light);
+      border: 1px solid #A7F3D0;
+      border-radius: 10px;
+      padding: 10px 13px;
+      margin-bottom: 16px;
+    }
+    .precio-top {
+      display: flex; align-items: baseline; gap: 8px;
+    }
+    .precio-monto {
+      font-size: 18px; font-weight: 800; color: var(--negro);
+      letter-spacing: -0.5px; line-height: 1;
+    }
+    .precio-label {
+      font-size: 12px; font-weight: 600; color: var(--azul-dark);
+    }
+    .precio-nota {
+      font-size: 11px; color: var(--sub); line-height: 1.4;
+      margin-top: 5px;
+    }
+
+    /* Micro-texto legal bajo el botón */
+    .form-legal {
+      font-size: 11px; color: var(--sub);
+      line-height: 1.6; margin-top: 12px;
+      padding-top: 12px; border-top: 1px solid var(--borde);
+    }
+    .form-legal a { color: var(--verde); text-decoration: underline; }
+
     /* ─── FORM CARD ─── */
     .form-card {
       scroll-margin-top: 84px;
@@ -893,9 +924,30 @@
     /* ─── FOOTER ─── */
     .aviso {
       background: var(--fondo); border-top: 1px solid var(--borde);
-      padding: 18px 40px; text-align: center;
-      font-size: 11px; color: var(--sub); line-height: 1.9;
+      padding: 26px 40px; text-align: center;
+      font-size: 12px; color: var(--sub); line-height: 1.8;
     }
+    .aviso-inner { max-width: 860px; margin: 0 auto; }
+    .aviso strong { color: var(--texto); }
+    .aviso a { color: var(--verde); text-decoration: underline; }
+
+    /* Datos del negocio */
+    .footer-datos {
+      background: var(--blanco); border-top: 1px solid var(--borde);
+      padding: 28px 40px;
+    }
+    .footer-datos-inner {
+      max-width: 1160px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px 32px;
+    }
+    .fdato-label {
+      font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.6px; color: var(--gris); margin-bottom: 3px;
+    }
+    .fdato-val { font-size: 13px; color: var(--texto); font-weight: 500; }
+    .fdato-val a { color: var(--verde); text-decoration: none; }
+    .fdato-val a:hover { text-decoration: underline; }
     footer {
       padding: 22px 40px;
       display: flex; align-items: center; justify-content: space-between;
@@ -1002,10 +1054,10 @@
         <span class="eyebrow-text">Disponible ahora · Tiempo estimado: 24hs hábiles</span>
       </div>
 
-      <h1>Tu alta en el<br>monotributo,<br><em>sin tocar ARCA.</em></h1>
+      <h1>Tu alta de Monotributo<br>lista para facturar, <em>en 24hs</em></h1>
 
       <p class="hero-desc">
-        Completás el formulario, coordinamos el pago y nuestro equipo hace el trámite completo. Vos no entrás a ningún portal ni tenés que lidiar con los impuestos.
+        Completás el formulario en 1 minuto, nuestro equipo de contadores hace todo el trámite ante ARCA por vos y recibís tu constancia oficial listo para facturar. Rápido, seguro y 100% online.
       </p>
 
       <div class="hero-puntos">
@@ -1057,6 +1109,15 @@
 
     <!-- Formulario -->
     <div class="form-card" id="formulario">
+
+      <!-- TARJETA DE PRECIO (transparencia comercial) -->
+      <div class="precio-card">
+        <div class="precio-top">
+          <span class="precio-monto">$ 60.000</span>
+          <span class="precio-label">Pago único de gestoría</span>
+        </div>
+        <div class="precio-nota">Incluye alta completa, optimización de categoría y soporte por WhatsApp. Sin abonos mensuales fijos.</div>
+      </div>
 
       <!-- YA COMPLETASTE: se muestra si localStorage indica que este navegador ya terminó el formulario -->
       <div id="ya-completo" class="ok-state" style="display:none;">
@@ -1125,6 +1186,9 @@
           <span class="btn-label">Empezar mi alta</span>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
+        <p class="form-legal">
+          Al registrarte, nuestro equipo se contactará para validar tus datos y coordinar el pago de nuestros honorarios de gestión privada. Recordá que la inscripción básica es un trámite gratuito que podés realizar por tu cuenta en la web oficial del estado (<a href="https://www.arca.gob.ar" target="_blank" rel="noopener nofollow">arca.gob.ar</a>).
+        </p>
         <div class="form-pie">
           <svg viewBox="0 0 16 16" fill="none"><path d="M8 1a4 4 0 0 0-4 4v2H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1h-1V5a4 4 0 0 0-4-4zm0 1.5A2.5 2.5 0 0 1 10.5 5v2h-5V5A2.5 2.5 0 0 1 8 2.5z" fill="#9CA3AF"/></svg>
           Tus datos están seguros con nosotros
@@ -1631,11 +1695,11 @@
 
       <div class="faq-item">
         <button class="faq-trigger" onclick="toggleFaq(this)">
-          ¿Por qué les tengo que dar mi clave fiscal?
+          ¿Cómo operan en mi nombre?
           <span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M6 2v8M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
         </button>
         <div class="faq-content">
-          <div class="faq-body">Es la única forma de operar en ARCA en tu nombre. A diferencia de otros servicios, te la pedimos <strong>después de confirmar el pago</strong>, nunca antes. Trabajamos con delegación de acceso temporal, que podés revocar cuando quieras desde la app. Tu información es confidencial.</div>
+          <div class="faq-body">Para realizar el trámite, utilizamos el sistema oficial de delegación de servicios de ARCA. Esto significa que nos otorgás un acceso temporal estrictamente limitado a la inscripción, el cual podés revocar vos mismo en cualquier momento desde tu aplicación móvil. Tu seguridad y confidencialidad son nuestra prioridad absoluta.</div>
         </div>
       </div>
 
@@ -1714,18 +1778,33 @@
   </a>
 </div>
 
-<!-- AVISO LEGAL -->
+<!-- AVISO LEGAL DESTACADO -->
 <div class="aviso">
-  <strong>AltaMonotributo</strong> es un servicio privado de gestión de trámites. No somos ARCA ni estamos afiliados al Estado argentino.<br>
-  El alta de monotributo también puede realizarse de forma gratuita directamente en arca.gob.ar.
+  <div class="aviso-inner">
+    <strong>Aviso Legal:</strong> AltaMonotributo es un sitio web de gestión privada independiente. No somos ARCA, AFIP ni ninguna entidad gubernamental de la República Argentina. Cobramos un honorario por el servicio de asesoramiento, carga de datos y optimización impositiva. El alta también puede realizarse de forma gratuita directamente en <a href="https://www.arca.gob.ar" target="_blank" rel="noopener nofollow">arca.gob.ar</a>.
+  </div>
+</div>
+
+<!-- DATOS DEL NEGOCIO -->
+<div class="footer-datos">
+  <div class="footer-datos-inner">
+    <div>
+      <div class="fdato-label">Operado por</div>
+      <div class="fdato-val">Tributo Simple S.A.S.</div>
+    </div>
+    <div>
+      <div class="fdato-label">Contacto</div>
+      <div class="fdato-val"><a href="mailto:ayuda@tributosimple.com">ayuda@tributosimple.com</a></div>
+    </div>
+  </div>
 </div>
 
 <footer>
   <div>© 2026 AltaMonotributo · un servicio de <a href="https://tributosimple.com" target="_blank" rel="noopener" style="font-weight:600;">Tributo Simple ®</a></div>
   <div style="display:flex;gap:16px;flex-wrap:wrap;">
     <a href="acerca-de-nosotros.html">Nosotros</a>
-    <a href="https://tributosimple.com/terminos-y-condiciones/" target="_blank" rel="noopener">Términos y condiciones</a>
-    <a href="https://tributosimple.com/terminos-y-condiciones/" target="_blank" rel="noopener">Política de privacidad</a>
+    <a href="terminos-y-condiciones.html">Términos y condiciones</a>
+    <a href="politica-de-privacidad.html">Política de privacidad</a>
     <a href="https://www.instagram.com/tributosimple/" target="_blank" rel="noopener">Instagram</a>
   </div>
 </footer>
