@@ -9,11 +9,11 @@
   <meta name="description" content="En menos de 24hs hábiles sos monotributista y podés empezar a facturar. Completás el formulario, nosotros hacemos todo el trámite ante ARCA. 100% online."/>
   <meta name="keywords" content="alta monotributo, inscripcion monotributo, alta de monotributo online, como darme de alta en monotributo, alta monotributo online argentina, tramite monotributo"/>
   <meta name="robots" content="index, follow"/>
-  <link rel="canonical" href="https://altamonotributo.com.ar/v2"/>
+  <link rel="canonical" href="https://altamonotributo.com/"/>
 
   <!-- Open Graph (Facebook / WhatsApp / Instagram) -->
   <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://altamonotributo.com.ar/"/>
+  <meta property="og:url" content="https://altamonotributo.com/"/>
   <meta property="og:title" content="Alta de Monotributo Online en menos de 24hs"/>
   <meta property="og:description" content="Completás el formulario y nosotros hacemos el trámite ante ARCA. Sin entrar a ningún portal, sin burocracia. Constancia oficial en menos de 24hs hábiles."/>
   <meta property="og:locale" content="es_AR"/>
@@ -34,7 +34,7 @@
     "provider": {
       "@type": "Organization",
       "name": "AltaMonotributo",
-      "url": "https://altamonotributo.com.ar"
+      "url": "https://altamonotributo.com"
     },
     "areaServed": {
       "@type": "Country",
@@ -83,16 +83,14 @@
   }
   </script>
 
-  <!-- Google Tag (GA4 + Google Ads) -->
-  <!-- Reemplazá G-XXXXXXXXXX con tu Measurement ID de GA4         -->
-  <!-- Reemplazá AW-XXXXXXXXXX con tu ID de Google Ads             -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <!-- Google Tag (Google Ads) -->
+  <!-- Si sumás GA4, agregá su gtag('config', 'G-...') debajo del de Ads -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18313714699"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){ dataLayer.push(arguments); }
     gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX');   // GA4
-    gtag('config', 'AW-XXXXXXXXXX');  // Google Ads
+    gtag('config', 'AW-18313714699');
   </script>
 
   <!-- Fuentes -->
@@ -100,6 +98,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  </script>
+
+  <!-- Fuentes: Inter Variable -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..900&display=swap" rel="stylesheet"/>
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1557,7 +1562,7 @@
           <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.72l-4 3.9.94 5.49L10 13.4l-4.94 2.71.94-5.49-4-3.9 5.61-.88z"/></svg>
           <svg viewBox="0 0 20 20"><path d="M10 1l2.39 4.84L18 6.72l-4 3.9.94 5.49L10 13.4l-4.94 2.71.94-5.49-4-3.9 5.61-.88z"/></svg>
         </div>
-        <p>Me daba paja meterme en el portal de ARCA. Acá completé el formulario en dos minutos y listo. No tuve que hacer nada más.</p>
+        <p>No tenía ganas de meterme en el portal de ARCA. Acá completé el formulario en dos minutos y listo. No tuve que hacer nada más.</p>
         <div class="test-info">
           <div class="test-avatar">VS</div>
           <div>
@@ -1786,6 +1791,31 @@
   function trackEvent(nombre, params) {
     if (typeof gtag === 'function') gtag('event', nombre, params || {});
   }
+
+  /* ─── Conversiones Google Ads ─── */
+  const CONV_WHATSAPP    = 'AW-18313714699/wt1iCJeXgc4cEIu41JxE';
+  const CONV_ALTA_PAGADA = 'AW-18313714699/LdotCOeDmc4cEIu41JxE';
+
+  /* Clic a WhatsApp (conversión secundaria, solo observación) */
+  document.addEventListener('click', function (e) {
+    const wa = e.target.closest('a[href*="wa.me"], a[href*="api.whatsapp.com"]');
+    if (wa && typeof gtag === 'function') gtag('event', 'conversion', { send_to: CONV_WHATSAPP });
+  });
+
+  /* Alta pagada: se dispara al volver de MercadoPago con ?pago=exitoso.
+     Requiere configurar la URL de retorno del link de pago de MercadoPago.
+     La confirmación definitiva también puede subirse offline desde el CRM
+     usando el gclid guardado junto al lead. */
+  (function conversionAltaPagada() {
+    try {
+      if (new URLSearchParams(window.location.search).get('pago') !== 'exitoso') return;
+      if (localStorage.getItem('ts_conv_alta')) return; /* evita duplicados */
+      if (typeof gtag === 'function') {
+        gtag('event', 'conversion', { send_to: CONV_ALTA_PAGADA, value: 60000, currency: 'ARS', transaction_id: '' });
+        localStorage.setItem('ts_conv_alta', new Date().toISOString());
+      }
+    } catch (e) {}
+  })();
 
   /* ─── Guardar avance parcial: se llama en cada "Siguiente" del funnel,
      así si el lead abandona a mitad de camino ya tenemos lo que completó ─── */
