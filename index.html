@@ -1933,7 +1933,9 @@
   /* En producción (https) el botón lleva al pago real de MercadoPago.
      En local (file://) simulamos el retorno del pago para previsualizar
      el flujo completo (pantalla de gracias + WhatsApp) sin pagar. */
-  const MP_REAL     = 'https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=1413458706-82e09e02-bbea-4ea6-b7ec-237d480df8d6';
+  /* ⚠️ TEMPORAL: link de prueba a $10 ARS para validar el flujo de retorno.
+     Volver a poner el link real de $60.000 antes de lanzar campañas. */
+  const MP_REAL     = 'https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=1413458706-b83e38b0-194b-42ff-a7a7-1608d20dc8fd';
   const MP_LINK     = (window.location.protocol === 'file:') ? '?pago=exitoso' : MP_REAL;
 
   /* ─── WhatsApp post-pago ─── */
