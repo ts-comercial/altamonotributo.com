@@ -100,6 +100,22 @@
     gtag('config', 'AW-18313714699');
   </script>
 
+  <!-- Meta Pixel — dataset "Alta Monotributo Web" (2178599816032793), separado de la app Tributo Simple -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    /* En previsualización local (file://) no inicializamos, para no ensuciar el dataset */
+    if (window.location.protocol !== 'file:') {
+      fbq('init', '2178599816032793');
+      fbq('track', 'PageView');
+    }
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt=""
+    src="https://www.facebook.com/tr?id=2178599816032793&ev=PageView&noscript=1"/></noscript>
+
   <!-- Fuentes -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -1977,6 +1993,17 @@
     if (typeof gtag === 'function') gtag('event', nombre, params || {});
   }
 
+  /* ─── Meta Pixel: eventos del funnel (dataset "Alta Monotributo Web").
+     esEstandar=true usa fbq('track') para eventos estándar (Purchase);
+     el resto va como trackCustom con prefijo AltaMonotributo_.
+     Cada evento se replica en window.dataLayer por si se suma GTM. ─── */
+  function trackMeta(evento, params, esEstandar) {
+    if (window.location.protocol === 'file:') return;
+    if (typeof fbq === 'function') fbq(esEstandar ? 'track' : 'trackCustom', evento, params || {});
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event: evento, ...(params || {}) });
+  }
+
   /* ─── Conversiones Google Ads ─── */
   const CONV_WHATSAPP    = 'AW-18313714699/wt1iCJeXgc4cEIu41JxE';
   const CONV_ALTA_PAGADA = 'AW-18313714699/LdotCOeDmc4cEIu41JxE';
@@ -1984,7 +2011,13 @@
   /* Clic a WhatsApp (conversión secundaria, solo observación) */
   document.addEventListener('click', function (e) {
     const wa = e.target.closest('a[href*="wa.me"], a[href*="api.whatsapp.com"]');
-    if (wa && typeof gtag === 'function') gtag('event', 'conversion', { send_to: CONV_WHATSAPP });
+    if (!wa) return;
+    if (typeof gtag === 'function') gtag('event', 'conversion', { send_to: CONV_WHATSAPP });
+    /* Meta: soporte por WhatsApp. Excluye el botón post-pago (ese hito ya lo mide Purchase). */
+    if (wa.id !== 'pago-ok-wa') {
+      const contexto = wa.closest('#pre-no-apto') ? 'revision_manual' : 'burbuja_ayuda';
+      trackMeta('AltaMonotributo_Soporte_WhatsApp', { contexto: contexto, variante: VARIANTE });
+    }
   });
 
   /* Alta pagada: se dispara al volver de MercadoPago con ?pago=exitoso.
@@ -2001,6 +2034,12 @@
       if (!localStorage.getItem('ts_conv_alta') && typeof gtag === 'function') {
         gtag('event', 'conversion', { send_to: CONV_ALTA_PAGADA, value: 60000, currency: 'ARS', transaction_id: '' });
         localStorage.setItem('ts_conv_alta', new Date().toISOString());
+      }
+
+      /* 1b) Purchase Meta (evita duplicados, con dedup propio) */
+      if (!localStorage.getItem('ts_meta_purchase')) {
+        trackMeta('Purchase', { value: 60000.00, currency: 'ARS', content_name: 'Gestión Alta Monotributo' }, true);
+        localStorage.setItem('ts_meta_purchase', new Date().toISOString());
       }
 
       /* 2) Pantalla de gracias + redirección a WhatsApp */
@@ -2301,6 +2340,7 @@
     };
     enviarAlCRM(leadData);
     trackEvent('lead_paso1', { variante: VARIANTE });
+    trackMeta('AltaMonotributo_Lead_Paso1', { variante: VARIANTE });
 
     resetFiltro();
     resetPreFiltro();
@@ -2345,6 +2385,7 @@
     leadData = { ...leadData, ...filtroData, estado: 'calificado', ts: new Date().toISOString() };
     enviarAlCRM(leadData);
     trackEvent('wizard_completo', { variante: VARIANTE });
+    trackMeta('AltaMonotributo_Formulario_Completo_Paso2', { variante: VARIANTE });
 
     document.getElementById('paso-2').style.display   = 'none';
     document.getElementById('paso-cal').style.display = 'block';
@@ -2366,6 +2407,11 @@
     // offline a Google Ads desde el CRM/n8n usando el gclid del lead.
     trackEvent('generate_lead', { variante: VARIANTE });
     trackEvent('form_completo', { variante: VARIANTE });
+    trackMeta('AltaMonotributo_Pago_Iniciado', {
+      value: 60000.00, currency: 'ARS',
+      content_name: 'Gestión Alta Monotributo',
+      variante: VARIANTE
+    });
 
     // Show OK state
     document.getElementById('paso-cal').style.display = 'none';
