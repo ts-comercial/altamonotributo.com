@@ -109,6 +109,9 @@
     document,'script','https://connect.facebook.net/en_US/fbevents.js');
     /* En previsualización local (file://) no inicializamos, para no ensuciar el dataset */
     if (window.location.protocol !== 'file:') {
+      /* Apaga la recolección automática de clics (SubscribedButtonClick):
+         solo medimos los eventos definidos manualmente en el funnel */
+      fbq('set', 'autoConfig', false, '2178599816032793');
       fbq('init', '2178599816032793');
       fbq('track', 'PageView');
     }
