@@ -1933,7 +1933,7 @@
   /* En producción (https) el botón lleva al pago real de MercadoPago.
      En local (file://) simulamos el retorno del pago para previsualizar
      el flujo completo (pantalla de gracias + WhatsApp) sin pagar. */
-  const MP_REAL     = 'https://mpago.la/1BGHetV';
+  const MP_REAL     = 'https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=2441976434-d3c3fe5f-44ba-4fd7-b13e-2c913a120885';
   const MP_LINK     = (window.location.protocol === 'file:') ? '?pago=exitoso' : MP_REAL;
 
   /* ─── WhatsApp post-pago ─── */
