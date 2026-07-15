@@ -1249,7 +1249,8 @@
     <div class="form-card" id="formulario">
 
       <!-- TARJETA DE PRECIO (transparencia comercial) -->
-      <div class="precio-card">
+      <!-- ⚠️ TEMPORAL: oculta mientras se prueba el flujo con el link de $1 -->
+      <div class="precio-card" style="display:none;">
         <div class="precio-top">
           <span class="precio-monto">$ 60.000</span>
           <span class="precio-label">Pago único de gestoría</span>
@@ -1933,7 +1934,8 @@
   /* En producción (https) el botón lleva al pago real de MercadoPago.
      En local (file://) simulamos el retorno del pago para previsualizar
      el flujo completo (pantalla de gracias + WhatsApp) sin pagar. */
-  const MP_REAL     = 'https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=1413458706-82e09e02-bbea-4ea6-b7ec-237d480df8d6';
+  /* ⚠️ TEMPORAL: link de prueba a $1 ARS. Volver al de $60.000 antes de lanzar campañas. */
+  const MP_REAL     = 'https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=1413458706-08f324b1-99d2-491b-a831-b4f53a21012f';
   const MP_LINK     = (window.location.protocol === 'file:') ? '?pago=exitoso' : MP_REAL;
 
   /* ─── WhatsApp post-pago ─── */
@@ -1952,6 +1954,12 @@
   function marcarCompletado() {
     try {
       localStorage.setItem('ts_completado', JSON.stringify({ link: MP_LINK, ts: new Date().toISOString() }));
+      /* Se pierde el estado de JS al ir a Mercado Pago; guardamos la
+         identidad del lead para poder avisarle al CRM que pagó al volver. */
+      localStorage.setItem('ts_lead_pago', JSON.stringify({
+        telefono: leadData.telefono, nombre: leadData.nombre,
+        apellido: leadData.apellido, email: leadData.email
+      }));
     } catch (e) {}
   }
   function chequearYaCompleto() {
@@ -2044,6 +2052,17 @@
       if (!localStorage.getItem('ts_meta_purchase')) {
         trackMeta('Purchase', { value: 60000.00, currency: 'ARS', content_name: 'Gestión Alta Monotributo' }, true);
         localStorage.setItem('ts_meta_purchase', new Date().toISOString());
+      }
+
+      /* 1c) Avisar al CRM que el lead pagó (evita duplicados) */
+      if (!localStorage.getItem('ts_crm_pagado')) {
+        try {
+          const identidad = JSON.parse(localStorage.getItem('ts_lead_pago') || '{}');
+          if (identidad.telefono) {
+            enviarAlCRM({ ...identidad, estado: 'pagado', ts: new Date().toISOString() });
+            localStorage.setItem('ts_crm_pagado', new Date().toISOString());
+          }
+        } catch (e) {}
       }
 
       /* 2) Pantalla de gracias + redirección a WhatsApp */
@@ -2363,7 +2382,14 @@
     document.getElementById('step-item-2').className = 'step-item active';
     document.getElementById('form-title').textContent = 'Veamos si calificás';
     document.getElementById('form-sub').textContent   = 'Unas preguntas cortas y listo';
-    document.getElementById('formulario').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    /* En mobile, cerrar el teclado primero y esperar a que la página se
+       reacomode antes de scrollear: si se hacen a la vez, compiten y el
+       scroll puede terminar en un lugar distinto al esperado. */
+    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    setTimeout(() => {
+      document.getElementById('formulario').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 300);
   }
 
   /* ─── Filtro rápido → Step 1 ─── */
