@@ -1947,17 +1947,18 @@
 
 <script>
   const CRM_WEBHOOK = 'https://crm-supabase-six.vercel.app/api/lead-intake';
-  const CHECK_DNI_ENDPOINT = 'https://crm-supabase-six.vercel.app/api/check-dni';
 
   /* Consulta si este DNI ya tiene un pago confirmado registrado en el CRM,
-     para no dejar generar otro cobro por el mismo trámite. */
+     para no dejar generar otro cobro por el mismo trámite. Comparte el
+     endpoint de lead-intake (action: 'check_dni') por el límite de
+     funciones serverless del plan del CRM. */
   async function chequearDniDuplicado(dni) {
     if (!dni) return false;
     try {
-      const resp = await fetch(CHECK_DNI_ENDPOINT, {
+      const resp = await fetch(CRM_WEBHOOK, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ dni })
+        body: JSON.stringify({ action: 'check_dni', dni })
       });
       const data = await resp.json();
       return !!data.duplicate;
