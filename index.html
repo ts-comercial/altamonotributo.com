@@ -1516,6 +1516,19 @@
           </div>
         </div>
 
+        <!-- DNI YA REGISTRADO CON PAGO CONFIRMADO -->
+        <div class="ok-state" id="dni-duplicado" style="display:none;">
+          <div class="ok-icon" style="background:#FEF2F2;">
+            <svg viewBox="0 0 24 24" fill="none" width="24" height="24">
+              <circle cx="12" cy="12" r="9" stroke="#DC2626" stroke-width="2"/>
+              <path d="M9 9l6 6M15 9l-6 6" stroke="#DC2626" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Ya tenés un trámite iniciado</h3>
+          <p>Encontramos un pago confirmado con este DNI. Si sos vos y necesitás ayuda, escribinos por WhatsApp y seguimos tu trámite.</p>
+          <a href="https://wa.me/5491124039191?text=Hola%2C%20ya%20hab%C3%ADa%20pagado%20mi%20alta%20de%20Monotributo%20y%20quiero%20consultar%20el%20estado" target="_blank" rel="noopener" class="btn-submit" style="text-decoration:none;display:flex;margin-top:16px;">Hablar por WhatsApp</a>
+        </div>
+
         <div class="form-pie">
           <svg viewBox="0 0 16 16" fill="none"><path d="M8 1a4 4 0 0 0-4 4v2H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1h-1V5a4 4 0 0 0-4-4zm0 1.5A2.5 2.5 0 0 1 10.5 5v2h-5V5A2.5 2.5 0 0 1 8 2.5z" fill="#8496A9"/></svg>
           El pago se coordina después de revisar tu solicitud
@@ -1930,6 +1943,24 @@
 
 <script>
   const CRM_WEBHOOK = 'https://crm-supabase-six.vercel.app/api/lead-intake';
+  const CHECK_DNI_ENDPOINT = 'https://crm-supabase-six.vercel.app/api/check-dni';
+
+  /* Consulta si este DNI ya tiene un pago confirmado registrado en el CRM,
+     para no dejar generar otro cobro por el mismo trámite. */
+  async function chequearDniDuplicado(dni) {
+    if (!dni) return false;
+    try {
+      const resp = await fetch(CHECK_DNI_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dni })
+      });
+      const data = await resp.json();
+      return !!data.duplicate;
+    } catch (e) {
+      return false;
+    }
+  }
   /* En producción (https) el botón lleva al pago real de MercadoPago.
      En local (file://) simulamos el retorno del pago para previsualizar
      el flujo completo (pantalla de gracias + WhatsApp) sin pagar. */
@@ -2381,13 +2412,10 @@
     document.getElementById('form-title').textContent = 'Veamos si calificás';
     document.getElementById('form-sub').textContent   = 'Unas preguntas cortas y listo';
 
-    /* En mobile, cerrar el teclado primero y esperar a que la página se
-       reacomode antes de scrollear: si se hacen a la vez, compiten y el
-       scroll puede terminar en un lugar distinto al esperado. */
+    /* Sin scroll automático: el usuario ya está parado en el formulario,
+       forzar un scroll acá solo genera saltos raros en mobile (compite
+       con el cierre del teclado). Que la página se quede donde está. */
     if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
-    setTimeout(() => {
-      document.getElementById('formulario').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 300);
   }
 
   /* ─── Filtro rápido → Step 1 ─── */
@@ -2406,9 +2434,30 @@
   }
 
   /* ─── Fin del filtro de datos → pantalla de calificación final ─── */
-  function mostrarCalificacion() {
+  async function mostrarCalificacion() {
     filtroData.dni  = document.getElementById('dni').value.trim();
     filtroData.cuit = document.getElementById('cuit').value.trim();
+
+    /* Evita generar otro pago si este DNI ya tiene uno confirmado.
+       Si la verificación falla por un problema nuestro, no bloqueamos. */
+    const btn = document.getElementById('next-6');
+    const btnLabelPrevio = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Verificando...';
+    const duplicado = await chequearDniDuplicado(filtroData.dni);
+    btn.disabled = false;
+    btn.textContent = btnLabelPrevio;
+
+    if (duplicado) {
+      document.getElementById('filtro-6').style.display = 'none';
+      document.getElementById('dni-duplicado').style.display = 'block';
+      document.getElementById('form-title').textContent = 'Ya tenés un trámite iniciado';
+      document.getElementById('form-sub').textContent = '';
+      leadData = { ...leadData, ...filtroData, estado: 'dni_duplicado', ts: new Date().toISOString() };
+      enviarAlCRM(leadData);
+      trackEvent('dni_duplicado', { variante: VARIANTE });
+      return;
+    }
 
     leadData = { ...leadData, ...filtroData, estado: 'calificado', ts: new Date().toISOString() };
     enviarAlCRM(leadData);
