@@ -1249,8 +1249,7 @@
     <div class="form-card" id="formulario">
 
       <!-- TARJETA DE PRECIO (transparencia comercial) -->
-      <!-- ⚠️ TEMPORAL: oculta mientras se prueba el flujo con el link de $1 -->
-      <div class="precio-card" style="display:none;">
+      <div class="precio-card">
         <div class="precio-top">
           <span class="precio-monto">$ 60.000</span>
           <span class="precio-label">Pago único de gestoría</span>
@@ -1934,8 +1933,7 @@
   /* En producción (https) el botón lleva al pago real de MercadoPago.
      En local (file://) simulamos el retorno del pago para previsualizar
      el flujo completo (pantalla de gracias + WhatsApp) sin pagar. */
-  /* ⚠️ TEMPORAL: link de prueba a $1 ARS. Volver al de $60.000 antes de lanzar campañas. */
-  const MP_REAL     = 'https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=1413458706-08f324b1-99d2-491b-a831-b4f53a21012f';
+  const MP_REAL     = 'https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=1413458706-82e09e02-bbea-4ea6-b7ec-237d480df8d6';
   const MP_LINK     = (window.location.protocol === 'file:') ? '?pago=exitoso' : MP_REAL;
 
   /* ─── WhatsApp post-pago ─── */
