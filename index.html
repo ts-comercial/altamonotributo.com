@@ -2419,11 +2419,32 @@
     document.getElementById('form-title').textContent = 'Veamos si calificás';
     document.getElementById('form-sub').textContent   = 'Unas preguntas cortas y listo';
 
-    /* Sin scroll automático: el usuario ya está parado en el formulario,
-       forzar un scroll acá solo genera saltos raros en mobile (compite
-       con el cierre del teclado). Que la página se quede donde está. */
+    /* Cierra el teclado del móvil antes de reubicar la vista. */
     if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
   }
+
+  /* ─── Mantener la vista en el formulario al cambiar de paso ───
+     En cada avance/retroceso reposiciona el formulario arriba (INSTANTÁNEO),
+     para que la página no "baje" a la sección siguiente cuando un paso ocupa
+     menos alto que el anterior. Solo en botones de navegación (no al elegir
+     una opción), e instantáneo para no generar el "recorrido" en mobile. */
+  (function () {
+    const form = document.getElementById('formulario');
+    if (!form) return;
+    function reubicar() {
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          const top = form.getBoundingClientRect().top;
+          if (Math.abs(top - 70) > 6) {
+            window.scrollTo({ top: top + window.pageYOffset - 70, behavior: 'auto' });
+          }
+        });
+      });
+    }
+    form.addEventListener('click', function (e) {
+      if (e.target.closest('.filtro-next, .btn-volver-mini, .btn-volver, #btn-p1')) reubicar();
+    });
+  })();
 
   /* ─── Filtro rápido → Step 1 ─── */
   function volverPaso1() {
