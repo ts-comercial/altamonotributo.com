@@ -1153,6 +1153,7 @@
       .aviso, footer { padding-left: 24px; padding-right: 24px; }
     }
     @media (max-width: 600px) {
+      html { scroll-behavior: auto; }
       nav .nav-links a:not(.btn-nav) { display: none; }
       .hero-nums { gap: 22px; }
       .pasos { grid-template-columns: 1fr; }
@@ -1511,8 +1512,9 @@
             <input type="text" id="dni" placeholder="30123456" inputmode="numeric" oninput="soloNumeros(this); checkTextStep('dni',6)"/>
           </div>
           <div class="fgroup">
-            <label for="cuit" style="letter-spacing:0;text-transform:none;font-size:11px;">CUIT <span style="color:#C4C9D4;font-weight:400;">(opcional)</span></label>
-            <input type="text" id="cuit" placeholder="Si no tenés, lo gestionamos nosotros" inputmode="numeric" oninput="soloNumeros(this)"/>
+            <label for="cuit" style="letter-spacing:0;text-transform:none;font-size:11px;">CUIT / CUIL <span style="color:#C4C9D4;font-weight:400;">(opcional)</span></label>
+            <input type="text" id="cuit" placeholder="Si no tenés, lo gestionamos nosotros" inputmode="numeric" maxlength="11" oninput="soloNumeros(this,11); clearErr('cuit')"/>
+            <div class="ferror" id="err-cuit">Ingresá un CUIT/CUIL válido (11 dígitos).</div>
           </div>
           <div class="filtro-nav">
             <button type="button" class="btn-volver-mini" onclick="filtroAnterior(6)">Anterior</button>
@@ -2439,9 +2441,27 @@
   }
 
   /* ─── Fin del filtro de datos → pantalla de calificación final ─── */
+  /* Valida CUIT/CUIL argentino: 11 dígitos + dígito verificador (módulo 11). */
+  function esCuitValido(c) {
+    if (!/^\d{11}$/.test(c)) return false;
+    const mult = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
+    let suma = 0;
+    for (let i = 0; i < 10; i++) suma += parseInt(c[i], 10) * mult[i];
+    let ver = 11 - (suma % 11);
+    if (ver === 11) ver = 0;
+    if (ver === 10) return false;
+    return ver === parseInt(c[10], 10);
+  }
+
   async function mostrarCalificacion() {
     filtroData.dni  = document.getElementById('dni').value.trim();
     filtroData.cuit = document.getElementById('cuit').value.trim();
+
+    /* CUIT/CUIL es opcional, pero si se completa tiene que ser válido */
+    if (filtroData.cuit && !esCuitValido(filtroData.cuit)) {
+      showErr('cuit', 'Ese CUIT/CUIL no es válido. Son 11 dígitos (ej: 20-12345678-9). Si no lo tenés, dejalo vacío.');
+      return;
+    }
 
     /* Evita generar otro pago si este DNI ya tiene uno confirmado.
        Si la verificación falla por un problema nuestro, no bloqueamos. */
