@@ -1135,10 +1135,22 @@
     @media (max-width: 960px) {
       .hero {
         grid-template-columns: 1fr;
-        gap: 44px;
-        padding: calc(var(--nav-h) + 44px) 24px 64px;
+        gap: 0;
+        padding: calc(var(--nav-h) + 32px) 24px 64px;
         min-height: auto;
       }
+      /* Form primero en mobile: los hijos de .hero-left pasan a ser items
+         de la grilla de .hero (display:contents) y se reordenan para que
+         el formulario quede inmediatamente despues del titulo.
+         Desktop (>960px) no se toca. */
+      .hero-left { display: contents; }
+      .hero-eyebrow { order: 1; }
+      .hero h1 { order: 2; margin-bottom: 26px; }
+      .form-card { order: 3; margin: 0 auto 44px; width: 100%; }
+      .hero-desc { order: 4; }
+      .hero-puntos { order: 5; }
+      .hero-aviso { order: 6; }
+      .hero-nums { order: 7; }
       .form-card { max-width: 520px; }
       .pasos { grid-template-columns: 1fr 1fr; }
       .pasos::before { display: none; }
