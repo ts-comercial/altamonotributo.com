@@ -1334,6 +1334,7 @@
           <div class="fgroup">
             <label for="apellido">Apellido</label>
             <input type="text" id="apellido" placeholder="García" autocomplete="family-name" oninput="soloLetras(this)"/>
+            <div class="ferror" id="err-apellido">Ingresá tu apellido.</div>
           </div>
         </div>
         <div class="fgroup">
@@ -2386,10 +2387,12 @@
   /* ─── Step 1 → Filtro rápido ─── */
   function irPaso2() {
     const nombre   = document.getElementById('nombre').value.trim();
+    const apellido = document.getElementById('apellido').value.trim();
     const telefono = document.getElementById('telefono').value.replace(/\D/g, '');
     const email    = document.getElementById('email').value.trim();
     let ok = true;
     if (!nombre || nombre.length < 2) { showErr('nombre', 'Ingresá tu nombre.'); ok = false; }
+    if (!apellido || apellido.length < 2) { showErr('apellido', 'Ingresá tu apellido.'); ok = false; }
     if (!telefono)                    { showErr('telefono', 'Ingresá tu número de celular.'); ok = false; }
     else if (telefono.length !== 10)  { showErr('telefono', 'El celular debe tener 10 dígitos, sin 0 ni 15 (ej: 11 1234-5678).'); ok = false; }
     if (!email || !/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email)) {
