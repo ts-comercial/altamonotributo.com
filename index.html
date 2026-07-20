@@ -2410,8 +2410,14 @@
       website: document.getElementById('website').value
     };
     enviarAlCRM(leadData);
-    trackEvent('lead_paso1', { variante: VARIANTE });
-    trackMeta('AltaMonotributo_Lead_Paso1', { variante: VARIANTE });
+    // El evento de Meta se dispara UNA sola vez por navegador (persona única),
+    // aunque la persona reintente/refresque. El CRM sí recibe cada intento
+    // (deduplica por teléfono del lado del servidor).
+    if (!localStorage.getItem('ts_meta_lead_paso1')) {
+      trackEvent('lead_paso1', { variante: VARIANTE });
+      trackMeta('AltaMonotributo_Lead_Paso1', { variante: VARIANTE });
+      localStorage.setItem('ts_meta_lead_paso1', new Date().toISOString());
+    }
 
     resetFiltro();
     resetPreFiltro();
@@ -2519,8 +2525,11 @@
 
     leadData = { ...leadData, ...filtroData, estado: 'calificado', ts: new Date().toISOString() };
     enviarAlCRM(leadData);
-    trackEvent('wizard_completo', { variante: VARIANTE });
-    trackMeta('AltaMonotributo_Formulario_Completo_Paso2', { variante: VARIANTE });
+    if (!localStorage.getItem('ts_meta_paso2')) {
+      trackEvent('wizard_completo', { variante: VARIANTE });
+      trackMeta('AltaMonotributo_Formulario_Completo_Paso2', { variante: VARIANTE });
+      localStorage.setItem('ts_meta_paso2', new Date().toISOString());
+    }
 
     document.getElementById('paso-2').style.display   = 'none';
     document.getElementById('paso-cal').style.display = 'block';
@@ -2540,13 +2549,17 @@
 
     // GA4: hito final del funnel en la web. La conversión de PAGO se sube
     // offline a Google Ads desde el CRM/n8n usando el gclid del lead.
-    trackEvent('generate_lead', { variante: VARIANTE });
-    trackEvent('form_completo', { variante: VARIANTE });
-    trackMeta('AltaMonotributo_Pago_Iniciado', {
-      value: 60000.00, currency: 'ARS',
-      content_name: 'Gestión Alta Monotributo',
-      variante: VARIANTE
-    });
+    // Una sola vez por navegador (persona única).
+    if (!localStorage.getItem('ts_meta_pago_iniciado')) {
+      trackEvent('generate_lead', { variante: VARIANTE });
+      trackEvent('form_completo', { variante: VARIANTE });
+      trackMeta('AltaMonotributo_Pago_Iniciado', {
+        value: 60000.00, currency: 'ARS',
+        content_name: 'Gestión Alta Monotributo',
+        variante: VARIANTE
+      });
+      localStorage.setItem('ts_meta_pago_iniciado', new Date().toISOString());
+    }
 
     // Show OK state
     document.getElementById('paso-cal').style.display = 'none';
