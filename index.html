@@ -1983,7 +1983,10 @@
   /* En producción (https) el botón lleva al pago real de MercadoPago.
      En local (file://) simulamos el retorno del pago para previsualizar
      el flujo completo (pantalla de gracias + WhatsApp) sin pagar. */
-  const MP_REAL     = 'https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=1413458706-82e09e02-bbea-4ea6-b7ec-237d480df8d6';
+  /* Link de pago fijo (fallback, sin efectivo). En el flujo normal se usa un
+     link generado por lead (ver crearLinkPagoDinamico) que ata el pago al
+     lead en el CRM; este queda como respaldo si esa llamada falla. */
+  const MP_REAL     = 'https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=1413458706-2af7ff92-0393-4e15-94d6-34027d117732';
   const MP_LINK     = (window.location.protocol === 'file:') ? '?pago=exitoso' : MP_REAL;
 
   /* ─── WhatsApp post-pago ─── */
@@ -2566,7 +2569,31 @@
     document.getElementById('paso-ok').style.display  = 'block';
     marcarCompletado();
 
-    setTimeout(() => { window.location.href = MP_LINK; }, 1200);
+    // Genera un link de pago atado a este lead (external_reference = teléfono,
+    // pagador precargado, sin efectivo). Si falla, cae al link fijo MP_LINK.
+    crearLinkPagoDinamico().then((destino) => {
+      setTimeout(() => { window.location.href = destino; }, 900);
+    });
+  }
+
+  /* Pide al CRM un link de pago de MP personalizado para este lead.
+     Devuelve el init_point, o el link fijo (MP_LINK) como respaldo. */
+  async function crearLinkPagoDinamico() {
+    if (window.location.protocol === 'file:') return MP_LINK; // preview local
+    try {
+      const resp = await fetch(CRM_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'create_payment',
+          telefono: leadData.telefono, nombre: leadData.nombre,
+          apellido: leadData.apellido, email: leadData.email
+        })
+      });
+      const data = await resp.json();
+      if (data && data.init_point) return data.init_point;
+    } catch (e) {}
+    return MP_LINK;
   }
 
   /* ─── CRM ─── */
