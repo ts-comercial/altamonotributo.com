@@ -2619,10 +2619,15 @@
       referrer: document.referrer || null,
       user_agent: navigator.userAgent
     };
+    // keepalive: true → el pedido se completa aunque la página redirija (a
+    // Mercado Pago) justo después. Sin esto, el guardado del paso "completo"
+    // (que ocurre ~900ms antes del redirect) se cancelaba a mitad de camino
+    // y se perdía en el CRM.
     fetch(CRM_WEBHOOK, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      keepalive: true
     }).catch(() => {});
   }
 
