@@ -2269,7 +2269,7 @@
     const montoWrap = document.getElementById('monto-wrap');
     if (btn.dataset.value === 'si') {
       montoWrap.style.display = 'block';
-      document.getElementById('pre-next-3').disabled = !document.getElementById('monto_estimado').value.trim();
+      document.getElementById('pre-next-3').disabled = false; // el monto es OPCIONAL
     } else {
       montoWrap.style.display = 'none';
       document.getElementById('pre-next-3').disabled = false;
@@ -2314,7 +2314,7 @@
     const raw = input.value.replace(/\D/g, '');
     input.value = raw ? '$' + Number(raw).toLocaleString('es-AR') : '';
     preData.monto_estimado = raw;
-    document.getElementById('pre-next-3').disabled = !raw;
+    // el monto es OPCIONAL: no bloquea el avance
   }
 
   const PRE_LABELS = { 1: 'progreso_cuit', 2: 'progreso_dni' };
