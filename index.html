@@ -1318,6 +1318,12 @@
         <p id="form-sub">Paso 1 de 2 · menos de un minuto</p>
       </div>
 
+      <!-- Reiniciar: se muestra desde el Paso 2 en adelante, para que el usuario
+           pueda empezar de cero fácil si se traba (siempre visible en el form). -->
+      <div id="reiniciar-wrap" style="display:none;text-align:center;margin-bottom:8px;">
+        <button type="button" class="btn-volver-mini" onclick="reiniciarFormulario()" style="font-size:12px;padding:6px 14px;">↻ Empezar de nuevo</button>
+      </div>
+
       <!-- PASO 1 -->
       <div id="paso-1">
         <!-- Campo trampa: invisible para personas, tentador para bots que autocompletan formularios -->
@@ -2049,6 +2055,12 @@
     try { localStorage.removeItem('ts_completado'); } catch (e) {}
     window.location.reload();
   });
+  // Reinicia todo el formulario desde cualquier paso (limpia la marca + recarga).
+  function reiniciarFormulario() {
+    try { localStorage.removeItem('ts_completado'); } catch (e) {}
+    window.location.reload();
+  }
+  window.reiniciarFormulario = reiniciarFormulario;
   chequearYaCompleto();
 
   /* ─── Tracking: captura GCLID + UTMs para atribución de Google Ads ─── */
@@ -2452,6 +2464,7 @@
     // Show filtro rápido
     document.getElementById('paso-1').style.display = 'none';
     document.getElementById('paso-2').style.display = 'block';
+    document.getElementById('reiniciar-wrap').style.display = 'block'; // botón reiniciar visible desde acá
 
     // Update stepper: step 1 → done, step 2 → active
     const b1 = document.getElementById('step-bubble-1');
