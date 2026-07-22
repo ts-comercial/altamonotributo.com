@@ -2622,14 +2622,22 @@
       referrer: document.referrer || null,
       user_agent: navigator.userAgent
     };
-    // NOTA: NO usar keepalive:true — rompe el envío en navegadores mobile
-    // (Safari/iOS) cuando hay preflight CORS: el POST no se manda y se pierde
-    // el guardado. El caso del "completo" antes del redirect a MP se cubre con
-    // el delay natural que hay antes de navegar (creación del link + timeout).
+    const body = JSON.stringify(payload);
+    // sendBeacon: envío CONFIABLE desde mobile y navegadores in-app (el WebView
+    // de Facebook/Instagram, por donde entra el tráfico del anuncio). Usa
+    // text/plain = "simple request", así NO dispara preflight CORS (que era lo
+    // que hacía que el POST no se enviara y se perdiera el lead en mobile).
+    // NO usar keepalive:true (rompe en mobile). Fallback a fetch si no hay beacon.
+    try {
+      if (navigator.sendBeacon &&
+          navigator.sendBeacon(CRM_WEBHOOK, new Blob([body], { type: 'text/plain' }))) {
+        return;
+      }
+    } catch (e) {}
     fetch(CRM_WEBHOOK, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      headers: { 'Content-Type': 'text/plain' },
+      body
     }).catch(() => {});
   }
 
