@@ -1995,7 +1995,7 @@
      endpoint de lead-intake (action: 'check_dni') por el límite de
      funciones serverless del plan del CRM. */
   async function chequearDniDuplicado(dni) {
-    if (!dni) return false;
+    if (!dni) return { duplicate: false, completado: false };
     try {
       const resp = await fetch(CRM_WEBHOOK, {
         method: 'POST',
@@ -2003,9 +2003,9 @@
         body: JSON.stringify({ action: 'check_dni', dni })
       });
       const data = await resp.json();
-      return !!data.duplicate;
+      return { duplicate: !!data.duplicate, completado: !!data.completado };
     } catch (e) {
-      return false;
+      return { duplicate: false, completado: false };
     }
   }
   /* En producción (https) el botón lleva al pago real de MercadoPago.
@@ -2548,11 +2548,11 @@
     const btnLabelPrevio = btn.textContent;
     btn.disabled = true;
     btn.textContent = 'Verificando...';
-    const duplicado = await chequearDniDuplicado(filtroData.dni);
+    const dniStatus = await chequearDniDuplicado(filtroData.dni);
     btn.disabled = false;
     btn.textContent = btnLabelPrevio;
 
-    if (duplicado) {
+    if (dniStatus.duplicate) {
       document.getElementById('filtro-6').style.display = 'none';
       document.getElementById('dni-duplicado').style.display = 'block';
       document.getElementById('form-title').textContent = 'Ya tenés un trámite iniciado';
@@ -2561,6 +2561,15 @@
       enviarAlCRM(leadData);
       trackEvent('dni_duplicado', { variante: VARIANTE });
       return;
+    }
+
+    // Ya completó el formulario antes con este DNI (sin pagar): lo reconocemos
+    // y lo llevamos directo al pago (la parte que le falta), sin rehacer todo.
+    if (dniStatus.completado) {
+      const calH3 = document.querySelector('#paso-cal h3');
+      const calP  = document.querySelector('#paso-cal p');
+      if (calH3) calH3.textContent = 'Ya cargaste tus datos con este DNI';
+      if (calP)  calP.textContent  = 'Ya habías completado el formulario antes. Si querés, continuá desde el pago para finalizar tu alta:';
     }
 
     leadData = { ...leadData, ...filtroData, estado: 'calificado', ts: new Date().toISOString() };
