@@ -1997,9 +1997,11 @@
   async function chequearDniDuplicado(dni) {
     if (!dni) return { duplicate: false, completado: false };
     try {
+      // text/plain = "simple request": NO dispara preflight CORS, así llega
+      // confiable desde el navegador in-app (donde el fetch json se descarta).
       const resp = await fetch(CRM_WEBHOOK, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify({ action: 'check_dni', dni })
       });
       const data = await resp.json();
@@ -2627,9 +2629,11 @@
   async function crearLinkPagoDinamico() {
     if (window.location.protocol === 'file:') return MP_LINK; // preview local
     try {
+      // text/plain = "simple request": sin preflight CORS, llega confiable
+      // desde el navegador in-app (donde el fetch json se descartaba).
       const resp = await fetch(CRM_WEBHOOK, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify({
           action: 'create_payment',
           telefono: leadData.telefono, nombre: leadData.nombre,
