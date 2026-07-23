@@ -2721,6 +2721,20 @@
     const ir = (destino) => {
       if (yaRedirigiendo) return;
       yaRedirigiendo = true;
+      // Avisamos al CRM en el instante exacto en que el navegador se va.
+      // Es distinto de 'completo' (que solo dice "apretó pagar"): un lead con
+      // 'completo' y sin 'redirigido_mp' significa que el redirect se colgó.
+      // Sin esta señal, entre el 20 y el 23/7 tuvimos 24 personas trabadas y
+      // tardamos 3 días en verlo, cruzando datos de Meta a mano.
+      // Va por sendBeacon, que sobrevive a la navegación.
+      try {
+        enviarAlCRM({
+          ...leadData,
+          estado: 'redirigido_mp',
+          via: (destino && destino !== MP_LINK) ? 'dinamico' : 'respaldo',
+          ts: new Date().toISOString(),
+        });
+      } catch (e) {}
       window.location.href = destino || MP_LINK;
     };
 
