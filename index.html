@@ -1630,7 +1630,10 @@
         <h3>Guardamos tus datos.</h3>
         <p>Estás siendo redirigido a MercadoPago para completar el pago…</p>
         <div class="ok-bar"><div class="ok-fill"></div></div>
-        <a href="#" id="link-pago-manual" class="btn-submit" style="text-decoration:none;display:flex;margin-top:16px;" target="_blank" rel="noopener">
+        <!-- Sin target="_blank": el navegador in-app de Facebook suele bloquear
+             las pestañas nuevas, y este link es justamente la salida de
+             emergencia de quien se quedó sin redirección. -->
+        <a href="#" id="link-pago-manual" class="btn-submit" style="text-decoration:none;display:flex;margin-top:16px;" rel="noopener">
           ¿No pasó nada? Ir a MercadoPago →
         </a>
       </div>
@@ -2065,7 +2068,10 @@
   /* Link de pago fijo (fallback, sin efectivo). En el flujo normal se usa un
      link generado por lead (ver crearLinkPagoDinamico) que ata el pago al
      lead en el CRM; este queda como respaldo si esa llamada falla. */
-  const MP_REAL     = 'https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=1413458706-2af7ff92-0393-4e15-94d6-34027d117732';
+  // Link de respaldo (se usa solo si falla la creación del link dinámico).
+  // Regenerado 23/7: el anterior excluía el efectivo y no tenía notification_url,
+  // así que un pago hecho por ahí no disparaba el webhook y quedaba invisible.
+  const MP_REAL     = 'https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=1413458706-630deedc-ce48-48b0-a40e-fcd6f2a478da';
   const MP_LINK     = (window.location.protocol === 'file:') ? '?pago=exitoso' : MP_REAL;
 
   /* ─── WhatsApp post-pago ─── */
@@ -2694,10 +2700,39 @@
     marcarCompletado();
 
     // Genera un link de pago atado a este lead (external_reference = teléfono,
-    // pagador precargado, sin efectivo). Si falla, cae al link fijo MP_LINK.
-    crearLinkPagoDinamico().then((destino) => {
-      setTimeout(() => { window.location.href = destino; }, 900);
-    });
+    // pagador precargado). Si falla o tarda, cae al link fijo MP_LINK.
+    //
+    // ⚠️ EL REDIRECT NO PUEDE DEPENDER DE QUE ESTE FETCH CONTESTE.
+    // En el navegador in-app de Facebook/Instagram una request descartada no
+    // rechaza NI resuelve: queda colgada para siempre. Sin corte de tiempo el
+    // .then() nunca corre, la persona se queda mirando "Estás siendo
+    // redirigido…" y no llega nunca a MercadoPago. Eso costó 22 intentos de
+    // pago con CERO llegadas a MP entre el 20/7 y el 22/7.
+    irAPagar();
+  }
+
+  /* Lleva a MercadoPago pase lo que pase: usa el link dinámico si llega a
+     tiempo, y si no el fijo. Nunca se queda esperando. */
+  let yaRedirigiendo = false;
+  function irAPagar() {
+    const CORTE_MS = 3500;   // si el link dinámico no llegó, arrancamos igual
+    const TOPE_MS  = 6000;   // red final absoluta
+
+    const ir = (destino) => {
+      if (yaRedirigiendo) return;
+      yaRedirigiendo = true;
+      window.location.href = destino || MP_LINK;
+    };
+
+    // Red final: pase lo que pase, a los 6s la persona está en MercadoPago.
+    setTimeout(() => ir(MP_LINK), TOPE_MS);
+
+    Promise.race([
+      crearLinkPagoDinamico(),
+      new Promise((resolve) => setTimeout(() => resolve(MP_LINK), CORTE_MS)),
+    ])
+      .then((destino) => { setTimeout(() => ir(destino), 700); })
+      .catch(() => ir(MP_LINK));
   }
 
   /* Pide al CRM un link de pago de MP personalizado para este lead.
