@@ -23,7 +23,7 @@
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://altamonotributo.com/"/>
   <meta property="og:title" content="Alta de Monotributo Online en menos de 24hs"/>
-  <meta property="og:description" content="Completás el formulario y nosotros hacemos el trámite ante ARCA. Sin entrar a ningún portal, sin burocracia. Constancia oficial en menos de 24hs hábiles."/>
+  <meta property="og:description" content="Completás el formulario y nosotros hacemos el trámite ante ARCA. Sin entrar a ningún portal, sin burocracia. Constancia de inscripción en menos de 24hs hábiles."/>
   <meta property="og:locale" content="es_AR"/>
   <meta property="og:site_name" content="AltaMonotributo"/>
 
@@ -38,7 +38,7 @@
     "@context": "https://schema.org",
     "@type": "Service",
     "name": "Alta de Monotributo Online",
-    "description": "Servicio de gestión de inscripción al monotributo ante ARCA. Completás el formulario, nosotros hacemos el trámite completo y te enviamos la constancia oficial en menos de 24 horas hábiles.",
+    "description": "Servicio de gestión de inscripción al monotributo ante ARCA. Completás el formulario, nosotros hacemos el trámite completo y te enviamos la constancia de inscripción emitida por ARCA en menos de 24 horas hábiles.",
     "provider": {
       "@type": "Organization",
       "name": "AltaMonotributo",
@@ -59,7 +59,7 @@
       "name": "Alta de Monotributo",
       "itemListElement": [
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Inscripción al Régimen Simplificado (ARCA)" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Constancia oficial de inscripción" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Constancia de inscripción emitida por ARCA" } },
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Soporte post-alta por WhatsApp" } }
       ]
     }
@@ -80,7 +80,7 @@
       {
         "@type": "Question",
         "name": "¿Necesito CUIT y clave fiscal para darme de alta en el monotributo?",
-        "acceptedAnswer": { "@type": "Answer", "text": "La clave fiscal la necesitás para el alta. Si no la tenés, te explicamos cómo sacarla con la app ARCA Móvil. El CUIT también lo podemos gestionar si no lo tenés." }
+        "acceptedAnswer": { "@type": "Answer", "text": "No la cargás en el formulario. El contador te la solicita de forma segura recién al iniciar el trámite, mediante el sistema de delegación de ARCA, y podés revocar el acceso cuando quieras. La clave fiscal la necesitás para el alta. Si no la tenés, te explicamos cómo sacarla con la app ARCA Móvil. El CUIT también lo podemos gestionar si no lo tenés." }
       },
       {
         "@type": "Question",
@@ -332,10 +332,10 @@
     .punto-check svg { width: 10px; height: 10px; }
 
     .hero-aviso {
-      font-size: 11.5px; color: rgba(255,255,255,0.5);
+      font-size: 12px; color: rgba(255,255,255,0.88);
       line-height: 1.7; margin-top: 24px;
     }
-    .hero-aviso strong { color: rgba(255,255,255,0.72); }
+    .hero-aviso strong { color: #fff; }
 
     .hero-nums {
       display: flex; flex-wrap: wrap; gap: 26px 30px;
@@ -1177,11 +1177,13 @@
          Desktop (>960px) no se toca. */
       .hero-left { display: contents; }
       .hero-eyebrow { order: 1; }
-      .hero h1 { order: 2; margin-bottom: 26px; }
+      .hero h1 { order: 2; margin-bottom: 14px; }
+      /* Aviso legal antes del formulario: tiene que verse sin scrollear
+         también en mobile (compliance Google Ads) */
+      .hero-aviso { order: 2; margin: 0 0 22px; }
       .form-card { order: 3; margin: 0 auto 44px; width: 100%; }
       .hero-desc { order: 4; }
       .hero-puntos { order: 5; }
-      .hero-aviso { order: 6; }
       .hero-nums { order: 7; }
       .form-card { max-width: 520px; }
       .pasos { grid-template-columns: 1fr 1fr; }
@@ -1236,7 +1238,7 @@
       <h1>Tu alta de Monotributo<br>lista para facturar,<br><em>en 24hs</em></h1>
 
       <p class="hero-desc">
-        Completás el formulario en 1 minuto, nuestro equipo de contadores hace todo el trámite ante ARCA por vos y recibís tu constancia oficial listo para facturar. Rápido, seguro y 100% online.
+        Completás el formulario en 1 minuto, nuestro contador matriculado hace todo el trámite ante ARCA por vos y recibís la constancia de inscripción que emite ARCA, lista para facturar. Rápido, seguro y 100% online.
       </p>
 
       <div class="hero-puntos">
@@ -1244,7 +1246,7 @@
           <span class="punto-check">
             <svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#00B894" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </span>
-          Constancia oficial en menos de 24hs hábiles
+          Constancia de inscripción en menos de 24hs hábiles
         </div>
         <div class="punto">
           <span class="punto-check">
@@ -1256,7 +1258,7 @@
           <span class="punto-check">
             <svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#00B894" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </span>
-          No te pedimos la clave fiscal por adelantado
+          No te pedimos la clave fiscal en el formulario
         </div>
         <div class="punto">
           <span class="punto-check">
@@ -1271,10 +1273,6 @@
       </div>
 
       <div class="hero-nums">
-        <div class="num-item">
-          <div class="num-val">+1.000</div>
-          <div class="num-label">altas gestionadas</div>
-        </div>
         <div class="num-item">
           <div class="num-val">+130k</div>
           <div class="num-label">usuarios en Tributo Simple</div>
@@ -1677,10 +1675,6 @@
 <div class="stats-band">
   <div class="stats-wrap">
     <div class="stat-item">
-      <div class="stat-val" data-target="1000" data-prefix="+" data-format="dot">+1.000</div>
-      <div class="stat-label">altas gestionadas</div>
-    </div>
-    <div class="stat-item">
       <div class="stat-val" data-target="130" data-prefix="+" data-suffix="k">+130k</div>
       <div class="stat-label">usuarios en Tributo Simple</div>
     </div>
@@ -1721,7 +1715,7 @@
       <div class="paso reveal reveal-d4">
         <div class="paso-circle">04</div>
         <h3>Recibís la constancia</h3>
-        <p>En menos de 24hs hábiles te enviamos el comprobante oficial. Podés facturar.</p>
+        <p>En menos de 24hs hábiles te enviamos la constancia de inscripción emitida por ARCA. Podés facturar.</p>
       </div>
     </div>
     <div class="reveal" style="margin-top:40px;text-align:center;">
@@ -1752,8 +1746,8 @@
         <div class="incluye-row">
           <div class="inc-n">02</div>
           <div class="inc-body">
-            <h3>Constancia oficial</h3>
-            <p>El comprobante de inscripción en PDF, con código de validación, listo para usar.</p>
+            <h3>Constancia de inscripción</h3>
+            <p>El comprobante de inscripción que emite ARCA, en PDF y con código de validación, listo para usar.</p>
           </div>
         </div>
         <div class="incluye-row">
@@ -1850,7 +1844,7 @@
           <span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M6 2v8M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
         </button>
         <div class="faq-content">
-          <div class="faq-body">La clave fiscal la necesitás para el alta, sí. Si no la tenés, te explicamos cómo sacarla con la app ARCA Móvil — es rápido. El CUIT también lo podemos gestionar si no lo tenés.</div>
+          <div class="faq-body">No la cargás en el formulario. El contador te la solicita de forma segura recién al iniciar el trámite, mediante el sistema de delegación de ARCA, y podés revocar el acceso cuando quieras. La clave fiscal la necesitás para el alta, sí. Si no la tenés, te explicamos cómo sacarla con la app ARCA Móvil — es rápido. El CUIT también lo podemos gestionar si no lo tenés.</div>
         </div>
       </div>
 
@@ -1890,7 +1884,7 @@
           <span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M6 2v8M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
         </button>
         <div class="faq-content">
-          <div class="faq-body">Hay personas reales detrás de cada trámite. El servicio es gestionado por el equipo de <strong>Tributo Simple</strong>, plataforma con miles de usuarios activos en Argentina. Nada es automático: si algo no cierra, te avisamos.</div>
+          <div class="faq-body">Hay personas reales detrás de cada trámite: el trámite lo realiza un contador matriculado. El servicio es gestionado por el equipo de <strong>Tributo Simple</strong>, plataforma con más de 100.000 descargas en Google Play y App Store. Nada es automático: si algo no cierra, te avisamos.</div>
         </div>
       </div>
 
@@ -1951,7 +1945,7 @@
   <div class="footer-datos-inner">
     <div>
       <div class="fdato-label">Operado por</div>
-      <div class="fdato-val">Tributo Simple S.A.S.</div>
+      <div class="fdato-val">Tributo Simple S.A.S. · CUIT 30-71775342-5</div>
     </div>
     <div>
       <div class="fdato-label">Contacto</div>
