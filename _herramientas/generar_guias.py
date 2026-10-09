@@ -6,6 +6,7 @@ import html, io, json, os, sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 from guias_contenido import GUIAS, ACTUALIZADO, ACTUALIZADO_ISO  # noqa: E402
+from guias_recursos import BLOG, CANAL_YOUTUBE, VIDEOS  # noqa: E402
 
 SITIO = 'https://altamonotributo.com'
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -57,6 +58,8 @@ tr:last-child td{border-bottom:0}
 details{border:1px solid var(--borde);border-radius:12px;padding:14px 16px;margin:10px 0}
 summary{font-weight:700;cursor:pointer}
 details p{margin:10px 0 0}
+.video{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000;margin:12px 0 6px}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .relacionadas{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:12px}
 .relacionadas a{display:block;padding:14px 16px;border:1px solid var(--borde);border-radius:12px;text-decoration:none;color:var(--negro);font-weight:600;font-size:15px;line-height:1.35}
 .relacionadas a:hover{border-color:var(--azul)}
@@ -159,8 +162,20 @@ def guia(g, todas):
     ts = (f'<div class="ts"><p><strong>¿Ya sos monotributista?</strong> En <a href="{TS.format(slug=g["slug"])}" '
           f'target="_blank" rel="noopener">Tributo Simple</a> te llevamos el monotributo todos los meses desde una app: '
           f'facturación, pagos, recategorización y un contador cuando lo necesitás.</p></div>')
-    main = (f'<div class="respuesta">{g["respuesta"]}</div>\n{g["cuerpo"]}\n{cta}\n'
-            f'<h2>Preguntas frecuentes</h2>\n{faq_html}\n{ts}\n'
+    video = VIDEOS.get(g['slug'])
+    video_html = ''
+    if video:
+        video_html = (f'<h2>Mirá el paso a paso en video</h2>\n<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/{video["id"]}" '
+                      f'title="{esc(video["titulo"])}" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" '
+                      f'allowfullscreen></iframe></div>\n<p class="nota">Video del <a href="{CANAL_YOUTUBE}" target="_blank" rel="noopener">canal de YouTube de Tributo Simple</a>.</p>')
+    blog = BLOG.get(g['slug'], [])
+    blog_html = ''
+    if blog:
+        items = ''.join(f'<li><a href="https://tributosimple.com/{s}/?utm_source=altamonotributo&amp;utm_medium=guias&amp;utm_campaign={g["slug"]}" '
+                        f'target="_blank" rel="noopener">{esc(t)}</a></li>' for t, s in blog)
+        blog_html = f'<h2>Para profundizar</h2>\n<p>Notas del blog de Tributo Simple sobre este tema:</p>\n<ul>{items}</ul>'
+    main = (f'<div class="respuesta">{g["respuesta"]}</div>\n{g["cuerpo"]}\n{video_html}\n{cta}\n'
+            f'<h2>Preguntas frecuentes</h2>\n{faq_html}\n{blog_html}\n{ts}\n'
             f'<h2>Seguí leyendo</h2>\n<div class="relacionadas">{rel_html}</div>\n'
             f'<p class="fuentes" style="margin-top:28px">Fuentes oficiales: {fuentes}</p>')
     schemas = [
@@ -178,6 +193,12 @@ def guia(g, todas):
             {'@type': 'ListItem', 'position': 2, 'name': 'Guías', 'item': SITIO + '/guias/'},
             {'@type': 'ListItem', 'position': 3, 'name': g['corto'], 'item': url}]},
     ]
+    if video:
+        schemas.append({'@context': 'https://schema.org', '@type': 'VideoObject', 'name': video['titulo'],
+                        'description': video['descripcion'], 'uploadDate': video['fecha'],
+                        'thumbnailUrl': f'https://i.ytimg.com/vi/{video["id"]}/hqdefault.jpg',
+                        'embedUrl': f'https://www.youtube.com/embed/{video["id"]}',
+                        'contentUrl': f'https://www.youtube.com/watch?v={video["id"]}'})
     return pagina(g['titulo'], g['descripcion'], url, header, main, schemas)
 
 
