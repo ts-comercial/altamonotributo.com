@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://altamonotributo.com/</loc><lastmod>2026-10-09</lastmod><priority>1.0</priority></url>
-  <url><loc>https://altamonotributo.com/acerca-de-nosotros</loc><lastmod>2026-10-09</lastmod><priority>0.6</priority></url>
+  <url><loc>https://altamonotributo.com/guias/</loc><lastmod>2026-10-09</lastmod><priority>0.8</priority></url>
+  <url><loc>https://altamonotributo.com/guias/categorias-monotributo</loc><lastmod>2026-10-09</lastmod><priority>0.8</priority></url>
+  <url><loc>https://altamonotributo.com/guias/cuanto-se-paga-monotributo</loc><lastmod>2026-10-09</lastmod><priority>0.8</priority></url>
+  <url><loc>https://altamonotributo.com/guias/factura-c-monotributo</loc><lastmod>2026-10-09</lastmod><priority>0.8</priority></url>
+  <url><loc>https://altamonotributo.com/guias/monotributo-y-relacion-de-dependencia</loc><lastmod>2026-10-09</lastmod><priority>0.8</priority></url>
+  <url><loc>https://altamonotributo.com/guias/recategorizacion-monotributo</loc><lastmod>2026-10-09</lastmod><priority>0.8</priority></url>
+  <url><loc>https://altamonotributo.com/guias/que-pasa-si-no-pago-monotributo</loc><lastmod>2026-10-09</lastmod><priority>0.8</priority></url>
+  <url><loc>https://altamonotributo.com/acerca-de-nosotros</loc><lastmod>2026-10-09</lastmod><priority>0.5</priority></url>
   <url><loc>https://altamonotributo.com/terminos-y-condiciones</loc><lastmod>2026-10-09</lastmod><priority>0.2</priority></url>
   <url><loc>https://altamonotributo.com/politica-de-privacidad</loc><lastmod>2026-10-09</lastmod><priority>0.2</priority></url>
 </urlset>
